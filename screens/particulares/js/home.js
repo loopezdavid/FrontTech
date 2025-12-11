@@ -1,4 +1,4 @@
-import { analyzeCV } from "./api.js";
+import { predictPdf } from "./api.js";
 
 const form = document.getElementById("cv-form");
 const inputFile = document.getElementById("cv-file");
@@ -12,7 +12,7 @@ form.addEventListener("submit", async (e) => {
   try {
     localStorage.setItem("cv_status", "loading");
 
-    const result = await analyzeCV(file);
+    const result = await predictPdf(file);
 
     localStorage.setItem("cv_result", JSON.stringify(result));
     window.location.href = "results.html";
