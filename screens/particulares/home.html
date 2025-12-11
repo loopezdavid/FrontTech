@@ -296,10 +296,8 @@ html, body {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-40px); }
 }
-
 </style>
 </head>
-
 
 <body>
 
@@ -309,7 +307,6 @@ html, body {
 
   <!-- HEADER -->
   <div class="header">
-
     <div class="brand">
       <div class="logo">EH</div>
       <div>
@@ -323,9 +320,8 @@ html, body {
         <span class="dot"></span>
         Privacidad local
       </div>
-      <button class="btn" onclick="location.href='../common/index.html'">Inicio</button>
+      <button class="btn" onclick="logout()">Salir</button>
     </div>
-
   </div>
 
   <!-- HERO -->
@@ -338,107 +334,61 @@ html, body {
   <!-- MAIN GRID -->
   <div class="main-grid">
 
-    <!-- LEFT (Dropzone) -->
+    <!-- LEFT -->
     <div>
 
+      <!-- DROPZONE REAL -->
       <div id="dropzone">
         <div id="dzGlow" class="glow"></div>
 
         <div class="icon">📄</div>
-        <div id="uploaderTitle" class="title">Arrastra o haz clic para subir tu CV (PDF)</div>
-        <div class="muted">Aceptamos PDF. Procesado localmente.</div>
+        <div id="uploaderTitle">Arrastra o haz clic para subir tu CV (PDF)</div>
+        <div class="muted">Solo PDF · El análisis se hace en el servidor</div>
 
-        <input id="fileInput" type="file" accept="application/pdf" style="display:none">
-
-        <div class="progress">
-          <div id="uploadFill" class="fill"></div>
-        </div>
+        <!-- INPUT REAL -->
+        <input
+          id="fileInput"
+          type="file"
+          accept="application/pdf"
+          required
+          style="display:none"
+        />
       </div>
 
+      <!-- CTA -->
       <div class="cta-row">
-        <button class="btn primary" id="analyzeBtn">Analizar CV</button>
-        <button class="btn" id="pasteBtn">Pegar texto</button>
-        <button class="btn" id="demoBtn">Usar demo</button>
+        <button class="btn primary" id="analyzeBtn">
+          Analizar CV
+        </button>
+
+        <!-- desactivados por ahora -->
+        <button class="btn" disabled>Pegar texto</button>
+        <button class="btn" disabled>Usar demo</button>
       </div>
 
     </div>
 
-    <!-- RIGHT (Info card) -->
+    <!-- RIGHT -->
     <aside class="right-card">
-
-      <div class="row">
-        <div><strong>Qué hacemos</strong></div>
-        <div style="text-align:right">
-          <strong>Privado</strong><br><span class="muted" style="font-size:13px">Local</span>
-        </div>
-      </div>
-
-      <div class="mini-chart">
-        <canvas id="miniCanvas" width="380" height="84"></canvas>
-      </div>
-
-      <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
-        <strong>Últimos análisis</strong>
-        <button class="btn" id="clearRecent">Limpiar</button>
-      </div>
-
-      <div class="recent-list" id="recentList"></div>
-
+      <strong>Privacidad</strong>
+      <p class="muted">
+        Tu CV se procesa de forma segura.  
+        El texto se extrae en backend y no se almacena.
+      </p>
     </aside>
 
   </div>
 
-  <!-- HOW IT WORKS -->
-  <section class="how-work">
-    <h2 class="hw-title">¿Cómo funciona el análisis con IA?</h2>
-
-    <div class="hw-grid">
-
-      <div class="hw-card">
-        <div class="hw-icon">🧾</div>
-        <h3 class="hw-step">1. Extraemos tu información</h3>
-        <p class="hw-text">
-          Analizamos el contenido de tu CV detectando experiencia,
-          educación, tecnologías y patrones profesionales clave.
-        </p>
-      </div>
-
-      <div class="hw-card">
-        <div class="hw-icon">🧠</div>
-        <h3 class="hw-step">2. Clasificación con IA avanzada</h3>
-        <p class="hw-text">
-          Identificamos tu rol ideal, seniority y salario estimado
-          basándonos en miles de perfiles reales del sector.
-        </p>
-      </div>
-
-      <div class="hw-card">
-        <div class="hw-icon">🎯</div>
-        <h3 class="hw-step">3. Insights y recomendaciones</h3>
-        <p class="hw-text">
-          Recibes puntos fuertes, áreas de mejora, skills relevantes
-          y acciones concretas para mejorar tu CV.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Bottom Wave -->
-  <div class="wave-container">
-    <svg class="wave" viewBox="0 0 1440 320">
-      <path fill="rgba(255,255,255,0.03)"
-        d="M0,192L40,202.7C80,213,160,235,240,224C320,213,400,171,480,160C560,149,640,171,720,176C800,181,880,171,960,176C1040,181,1120,203,1200,197.3C1280,192,1360,160,1400,144L1440,128L1440,320L0,320Z"/>
-    </svg>
-  </div>
-
 </div>
 
-<!-- Global Footer -->
+<!-- FOOTER -->
 <div id="global-footer"></div>
-<script src="../common/js/footer.js"></script>
+<script src="../../screens/common/js/footer.js"></script>
 
-<script src="../js/home.js"></script>
+<!-- 🔐 AUTH -->
+<script src="../../screens/common/auth/auth_guard.js"></script>
+
+<script src="./js/home.js"></script>
 
 </body>
 </html>
