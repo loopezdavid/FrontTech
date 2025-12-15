@@ -1,0 +1,99 @@
+<style>
+.footer {
+  position: relative;
+  width: 100%;
+  padding: 60px 20px 50px;
+  margin-top: 60px;
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.footer-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6ef1d4, #3fb7ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  color: #022;
+  box-shadow: 0 14px 28px rgba(63,183,255,0.25);
+}
+
+.footer-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin: 0;
+}
+
+.footer-sub {
+  font-size: 14px;
+  margin: 0;
+  color: #9fbfc1;
+}
+
+.footer-links {
+  margin: 16px 0 26px;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #bde4e1;
+  font-size: 15px;
+  transition: .2s ease;
+}
+
+.footer-links a:hover {
+  color: #6ef1d4;
+}
+
+.footer-copy {
+  font-size: 14px;
+  color: #9fbfc1;
+  opacity: 0.8;
+}
+</style>
+
+<footer class="footer">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <div class="footer-logo">EH</div>
+      <div>
+        <p class="footer-title">El Huesaso GPT</p>
+        <p class="footer-sub">Análisis profesional con IA local</p>
+      </div>
+    </div>
+
+    <nav class="footer-links">
+      <a href="../common/index.html">Inicio</a>
+      <a href="#">Privacidad</a>
+      <a href="#">Acerca del proyecto</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </nav>
+
+    <p class="footer-copy">
+      © <span id="footer-year"></span> El Huesaso GPT · Todos los derechos reservados.
+    </p>
+
+  </div>
+</footer>

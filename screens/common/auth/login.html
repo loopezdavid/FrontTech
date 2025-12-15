@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Acceso — El Huesaso GPT</title>
+
+<style>
+:root{
+  --bg1:#04121a;
+  --bg2:#031319;
+  --accent:#56e6c8;
+  --accent2:#2fb0ff;
+  --muted:#9fbfc1;
+}
+
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:#eafbf9;
+}
+
+.page{
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:64px;
+}
+
+.login-card{
+  width:100%;
+  max-width:520px;
+  padding:56px;
+  border-radius:24px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  backdrop-filter:blur(12px);
+  box-shadow:0 40px 120px rgba(0,0,0,.6);
+}
+
+.logo{
+  width:96px;
+  height:96px;
+  border-radius:22px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:34px;
+  color:#022;
+  margin-bottom:32px;
+}
+
+h1{
+  font-size:30px;
+  margin:0 0 10px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:15px;
+  margin-bottom:36px;
+  max-width:420px;
+}
+
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.input{
+  width:100%;
+  padding:16px 18px;
+  font-size:15px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#eafbf9;
+}
+
+.input::placeholder{color:#7fa4a6}
+
+.btn{
+  margin-top:12px;
+  padding:16px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  font-weight:900;
+  font-size:15px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#022;
+}
+
+.links{
+  display:flex;
+  justify-content:space-between;
+  margin-top:22px;
+  font-size:14px;
+}
+
+.links a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:700;
+}
+
+.privacy{
+  margin-top:40px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="login-card">
+    <div class="logo">EH</div>
+
+    <h1 id="title">Accede a tu cuenta</h1>
+    <div class="subtitle" id="subtitle">
+      Inicia sesión para continuar con el análisis profesional de tu CV.
+    </div>
+
+    <form class="form" onsubmit="login(event)">
+      <input class="input" type="email" placeholder="Correo electrónico" required />
+      <input class="input" type="password" placeholder="Contraseña" required />
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+
+    <div class="links">
+      <a href="#">Crear cuenta</a>
+      <a href="#" onclick="demo()">Entrar en modo demo</a>
+    </div>
+
+    <div class="privacy">
+      Procesamos tu información de forma privada y segura.
+      Nunca compartimos tus datos ni tu CV.
+    </div>
+  </div>
+</div>
+
+<div id="global-footer"></div>
+<script src="../../common/js/footer.js"></script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const mode = params.get('mode') || 'particulares';
+
+document.getElementById('title').textContent =
+  mode === 'empresas' ? 'Acceso para empresas' : 'Acceso para particulares';
+
+document.getElementById('subtitle').textContent =
+  mode === 'empresas'
+    ? 'Gestiona candidatos y análisis por lotes.'
+    : 'Analiza tu CV y obtén insights profesionales.';
+
+function login(e){
+  e.preventDefault();
+  if(mode === 'empresas'){
+    window.location.href = '../../empresas/home.html';
+  }else{
+    window.location.href = '../../particulares/home.html';
+  }
+}
+
+function demo(){
+  login(new Event('submit'));
+}
+</script>
+
+</body>
+</html>

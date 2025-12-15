@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cargando — El Huesaso GPT</title>
+
+<style>
+:root{
+  --bg-1:#04121a;
+  --bg-2:#081e27;
+  --muted:#9fbfc1;
+  --accent:#6ef1d4;
+  --accent-2:#3fb7ff;
+  --glass: rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#e9f9f7;overflow:hidden}
+.wrapper{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px;gap:28px}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:1120px;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.04);
+  padding:30px;
+  display:flex;
+  gap:28px;
+  align-items:center;
+  box-shadow:0 30px 80px rgba(3,18,22,0.6);
+  backdrop-filter:blur(10px);
+}
+
+/* LEFT: Neural canvas */
+.canvas-wrap{flex:1;min-height:260px;position:relative;display:flex;align-items:center;justify-content:center}
+.neural-canvas{width:100%;height:260px;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.02)}
+
+/* SVGMESH */
+.mesh{position:absolute;inset:0}
+.node{fill:rgba(110,241,212,0.08);stroke:rgba(110,241,212,0.18);stroke-width:1}
+.link{stroke:rgba(63,183,255,0.06);stroke-width:1.2;stroke-linecap:round}
+
+/* animated glows */
+.glow-orb{position:absolute;width:160px;height:160px;border-radius:50%;filter:blur(36px);opacity:0.9;mix-blend-mode:screen;pointer-events:none}
+.g1{left:12%;top:10%;background:radial-gradient(circle,#6ef1d4,transparent 40%)}
+.g2{right:8%;top:20%;background:radial-gradient(circle,#3fb7ff,transparent 40%)}
+.g3{left:40%;bottom:8%;background:radial-gradient(circle,#6ef1d4,transparent 40%)}
+
+/* RIGHT: Info */
+.info{width:360px;display:flex;flex-direction:column;gap:14px}
+.brand-top{display:flex;align-items:center;gap:12px}
+.logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:900;color:#022}
+.h-title{font-weight:900;font-size:20px}
+.h-sub{color:var(--muted);font-size:13px}
+
+/* PROGRESS RING & PERCENT */
+.ring-wrap{display:flex;align-items:center;gap:14px;margin-top:10px}
+.ring{width:110px;height:110px;display:flex;align-items:center;justify-content:center;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .num{position:absolute;font-weight:900;font-size:22px}
+
+/* STEPS */
+.steps{margin-top:14px;border-radius:12px;padding:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
+.step{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;transition:all .25s}
+.step .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.step.active{background:linear-gradient(90deg,rgba(110,241,212,0.06),rgba(63,183,255,0.03));border:1px solid rgba(110,241,212,0.08)}
+.step.active .dot{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.step .text{font-size:13px;color:var(--muted)}
+
+/* MESSAGES */
+.message{margin-top:14px;color:var(--muted);font-size:14px;min-height:34px}
+
+/* FOOTER CTA */
+.controls{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}
+.btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022;border:none;font-weight:800}
+.btn.ghost{background:transparent}
+
+/* small */
+.small{font-size:12px;color:var(--muted)}
+
+/* responsive */
+@media (max-width:980px){
+  .card{flex-direction:column}
+  .info{width:100%}
+  .canvas-wrap{width:100%}
+}
+
+/* subtle node animation */
+@keyframes pulse {
+  0%{r:2.4}
+  50%{r:4.4}
+  100%{r:2.4}
+}
+
+/* tiny loading bars for step visual */
+.step .bar{height:6px;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:6px;width:0;transition:width .6s}
+</style>
+</head>
+<body>
+
+<div class="wrapper" role="main" aria-live="polite">
+
+  <div class="card" role="region" aria-label="Procesando análisis de CV">
+
+    <!-- LEFT: neural visual -->
+    <div class="canvas-wrap">
+      <div class="neural-canvas" aria-hidden="true">
+        <svg class="mesh" viewBox="0 0 960 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- links - generated in JS for dynamic animation fallback, show a static network -->
+          <g id="links"></g>
+          <g id="nodes"></g>
+        </svg>
+
+        <div class="glow-orb g1"></div>
+        <div class="glow-orb g2"></div>
+        <div class="glow-orb g3"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: info & progress -->
+    <div class="info" aria-hidden="false">
+      <div class="brand-top">
+        <div class="logo">EH</div>
+        <div>
+          <div class="h-title">Procesando tu CV</div>
+          <div class="h-sub">La IA extrae y analiza — esto puede tardar unos segundos</div>
+        </div>
+      </div>
+
+      <!-- ring -->
+      <div class="ring-wrap">
+        <div class="ring" aria-hidden="true">
+          <svg width="110" height="110" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" stroke="rgba(255,255,255,0.03)" stroke-width="12" fill="none"></circle>
+            <circle id="progressCircle" cx="50" cy="50" r="44" stroke="url(#grad)" stroke-width="12" stroke-linecap="round" fill="none" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#6ef1d4"/>
+                <stop offset="1" stop-color="#3fb7ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="num" id="pct">0%</div>
+        </div>
+
+        <div style="flex:1">
+          <div class="small">Estado del proceso</div>
+          <div id="currentPhase" style="font-weight:800;margin-top:6px">Inicializando…</div>
+          <div id="eta" class="small">ETA estimada: calculando…</div>
+        </div>
+      </div>
+
+      <!-- steps -->
+      <div class="steps" role="list" aria-label="Progreso por pasos">
+        <div class="step" id="s1"><div class="dot"></div><div class="text">Leyendo archivo</div></div>
+        <div class="step" id="s2"><div class="dot"></div><div class="text">Extrayendo texto</div></div>
+        <div class="step" id="s3"><div class="dot"></div><div class="text">Analizando con IA</div></div>
+        <div class="step" id="s4"><div class="dot"></div><div class="text">Generando insights</div></div>
+      </div>
+
+      <div class="message" id="message">Conectando al motor de análisis…</div>
+
+      <div class="controls">
+        <button class="btn ghost" id="cancelBtn">Cancelar</button>
+        <button class="btn primary" id="debugBtn" title="Forzar resultado (dev)">Forzar resultado</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="text-align:center;color:var(--muted);font-size:13px">No cierres esta ventana. El progreso se actualizará automáticamente.</div>
+
+</div>
+
+<script>
+/*
+ Loader A - IA Neural Compute (vanilla JS)
+ - If window.api.full_analysis(text) exists, the loader will call it.
+ - Otherwise it simulates phases with nice timing and then writes 'analysis_result' to localStorage.
+ - Emits storage event so other tabs can react.
+*/
+
+(function(){
+  // Config
+  const STEPS = [
+    {id:'s1', label:'Leyendo archivo', min:600, max:1100},
+    {id:'s2', label:'Extrayendo texto', min:700, max:1400},
+    {id:'s3', label:'Analizando con IA', min:900, max:2200},
+    {id:'s4', label:'Generando insights', min:500, max:1200}
+  ];
+
+  const rotatingMsgs = [
+    'Comparando con +120k perfiles reales...',
+    'Ajustando pesos del modelo...',
+    'Normalizando entidades (skills, empresas, fechas)...',
+    'Calculando salario estimado según mercado...'
+  ];
+
+  // DOM refs
+  const msgEl = document.getElementById('message');
+  const pctEl = document.getElementById('pct');
+  const phEl = document.getElementById('currentPhase');
+  const etaEl = document.getElementById('eta');
+  const progressCircle = document.getElementById('progressCircle');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const debugBtn = document.getElementById('debugBtn');
+  let cancelled = false;
+
+  // helpers
+  function rand(min,max){ return Math.round(min + Math.random()*(max-min)); }
+  function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+  // progress helpers
+  const circumference = 2 * Math.PI * 44; // r=44
+  function setProgress(perc){
+    const offset = Math.round(circumference * (1 - perc/100));
+    progressCircle.style.strokeDashoffset = offset;
+    pctEl.textContent = Math.round(perc) + '%';
+  }
+
+  // generate static network (SVG nodes + links) for visual
+  function generateNetwork(){
+    const svg = document.querySelector('.mesh');
+    const nodesGroup = svg.querySelector('#nodes');
+    const linksGroup = svg.querySelector('#links');
+    // canvas size
+    const W = 960, H = 320;
+    const N = 18;
+    const pts = [];
+    for(let i=0;i<N;i++){
+      const x = 40 + Math.random()*(W-80);
+      const y = 30 + Math.random()*(H-60);
+      pts.push({x,y});
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',x);
+      c.setAttribute('cy',y);
+      c.setAttribute('r', Math.random()*2.2 + 2.2);
+      c.setAttribute('class','node');
+      nodesGroup.appendChild(c);
+    }
+    // links: connect near neighbors
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const a = pts[i], b = pts[j];
+        const dx = a.x-b.x, dy=a.y-b.y;
+        const d = Math.sqrt(dx*dx+dy*dy);
+        if(d < 160 && Math.random()>.45){
+          const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+          l.setAttribute('x1',a.x);
+          l.setAttribute('y1',a.y);
+          l.setAttribute('x2',b.x);
+          l.setAttribute('y2',b.y);
+          l.setAttribute('class','link');
+          linksGroup.appendChild(l);
+        }
+      }
+    }
+    // animate subtle node opacity
+    [...nodesGroup.children].forEach((c,idx)=>{
+      const t = 1500 + Math.random()*3000;
+      c.style.transition = `opacity ${t}ms ease-in-out ${Math.random()*600}ms`;
+      (function flip(){ c.style.opacity = 0.12 + Math.random()*0.9; setTimeout(flip, t + Math.random()*1200); })();
+    });
+    // links pulse
+    [...linksGroup.children].forEach((l)=>{
+      l.style.opacity = 0.04 + Math.random()*0.08;
+      const tw = 2000 + Math.random()*3000;
+      (function pulse(){ l.style.opacity = 0.02 + Math.random()*0.12; setTimeout(pulse, tw + Math.random()*1500); })();
+    });
+  }
+
+  // run phases sequentially and update progress
+  async function runPhases(simulated=true, text){
+    let accum = 0;
+    const totalEstimated = STEPS.reduce((s,st)=> s + rand(st.min,st.max), 0);
+    let elapsed = 0;
+    setProgress(2);
+    for(let i=0;i<STEPS.length;i++){
+      if(cancelled) throw new Error('cancelled');
+      const st = STEPS[i];
+      // set active step styling
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      const stepEl = document.getElementById(st.id);
+      stepEl.classList.add('active');
+      // animate bar inside step
+      const bar = document.createElement('div'); bar.className='bar'; stepEl.appendChild(bar);
+      phEl.textContent = st.label;
+      // rotating msg
+      msgEl.textContent = rotatingMsgs[i % rotatingMsgs.length];
+      // duration
+      const dur = rand(st.min, st.max);
+      const stepStart = performance.now();
+      // animate progress for this chunk
+      const startPct = Math.round(accum / totalEstimated * 100);
+      const endPct = Math.min(98, Math.round((accum + dur) / totalEstimated * 100));
+      // animate small increments
+      const frames = Math.max(12, Math.round(dur/80));
+      for(let f=0; f<frames; f++){
+        if(cancelled) throw new Error('cancelled');
+        const t = f/frames;
+        const current = startPct + (endPct - startPct) * t;
+        setProgress(current);
+        bar.style.width = `${Math.min(100, t*100)}%`;
+        etaEl.textContent = 'ETA estimada: ' + Math.max(1, Math.round((totalEstimated - (accum + dur*t))/1000)) + 's';
+        await sleep(dur/frames);
+      }
+      // finalize step
+      bar.style.width = '100%';
+      accum += dur;
+      // tiny pause
+      await sleep(160 + Math.random()*160);
+    }
+
+    // finalizing
+    phEl.textContent = 'Finalizando análisis';
+    msgEl.textContent = 'Compilando resultados…';
+    for(let p=98;p<=100;p++){
+      if(cancelled) throw new Error('cancelled');
+      setProgress(p);
+      await sleep(120);
+    }
+    // create final analysis result (from backend or simulated)
+    let analysis = null;
+    if(simulated){
+      analysis = {
+        role: "Full Stack Developer",
+        seniority: "Senior",
+        salaryRange: "55k - 75k €",
+        overallScore: 0.94,
+        matching: 0.92,
+        complexity: 7.8,
+        skills: [
+          { name: "Node.js", level: "Advanced", insight: "Lideró microservicios" },
+          { name: "React", level: "Advanced", insight: "SPAs con optimización" },
+          { name: "Docker", level: "Advanced", insight: "Pipelines CI/CD" },
+          { name: "AWS", level: "Intermediate", insight: "ECS, S3" },
+          { name: "Kubernetes", level: "Beginner", insight: "Necesita profundizar" }
+        ],
+        distribution: { backend: 0.6, frontend: 0.48, devops: 0.22 },
+        improvements: [
+          { title: "Añadir métricas de impacto", reason: "Los reclutadores valoran números" },
+          { title: "Especificar versiones", reason: "Mejora credibilidad" },
+          { title: "Links a proyectos", reason: "Prueba de trabajo real" }
+        ],
+        topRoles: [
+          { title: "Backend Engineer", prob: 0.88 },
+          { title: "Frontend Architect", prob: 0.76 },
+          { title: "DevOps Engineer", prob: 0.62 }
+        ]
+      };
+    } else {
+      // if backend provided, we should have fetched data
+      analysis = { /* ...backend result...*/ };
+    }
+
+    // store result and emit storage event
+    try {
+      localStorage.setItem('analysis_result', JSON.stringify(analysis));
+      // storage event for same tab (manual)
+      window.dispatchEvent(new StorageEvent('storage', { key: 'analysis_result', newValue: JSON.stringify(analysis) }));
+    } catch (e) {
+      console.warn('Could not persist analysis_result', e);
+    }
+
+    // redirect to results after a brief delay
+    await sleep(600);
+    // give user a little flourish
+    window.location.href = '../particulares/results.html';
+  }
+
+  // try to call real backend if available
+  async function tryBackendFlow(){
+    try{
+      // if we have a file b64 stored, try to call extract_text and full_analysis
+      const b64 = localStorage.getItem('cv_file_b64') || null;
+      const text = localStorage.getItem('cv_text') || null;
+      // prefer full_analysis with text
+      if(window.api && typeof window.api.full_analysis === 'function'){
+        phEl.textContent = 'Llamando al motor IA';
+        msgEl.textContent = 'Solicitando análisis al backend...';
+        // if we have text -> send text, else if file -> send file
+        const payload = text ? { cv_text: text } : (b64 ? { file_b64: b64 } : null);
+        if(!payload) throw new Error('No hay datos de CV disponibles para el backend.');
+        // call
+        const res = await window.api.full_analysis(payload.cv_text || payload);
+        if(res && (res.role || res.skills)){
+          // save and redirect
+          localStorage.setItem('analysis_result', JSON.stringify(res));
+          window.location.href = '../particulares/results.html';
+          return true;
+        }
+      }
+    }catch(err){
+      console.warn('Backend flow failed',err);
+    }
+    return false;
+  }
+
+  // main entry
+  (async function main(){
+    try{
+      generateNetwork(); // visual
+      // attempt backend first (non-blocking but await short)
+      const backendAvailable = await tryBackendFlow();
+      if(backendAvailable) return;
+      // else simulate phases
+      await runPhases(true);
+    }catch(err){
+      if(err.message === 'cancelled'){
+        msgEl.textContent = 'Análisis cancelado por el usuario.';
+        phEl.textContent = 'Cancelado';
+        setProgress(0);
+        // small delay then go back
+        await sleep(500);
+        location.href = '../particulares/home.html';
+        return;
+      }
+      console.error(err);
+      msgEl.textContent = 'Error procesando el CV. Intenta de nuevo más tarde.';
+      phEl.textContent = 'Error';
+      // allow user to go back
+      cancelBtn.textContent = 'Volver';
+      cancelBtn.onclick = ()=> location.href = '../particulares/home.html';
+    }
+  })();
+
+  // cancel handler
+  cancelBtn.addEventListener('click', ()=> {
+    cancelled = true;
+    uiClick();
+  });
+
+  // debug: force result
+  debugBtn.addEventListener('click', async ()=>{
+    uiClick(0.015);
+    await sleep(200);
+    // force store simulated quick result
+    const quick = {
+      role: "Frontend Engineer",
+      seniority: "Mid",
+      salaryRange: "38k - 48k €",
+      overallScore: 0.81,
+      matching: 0.81,
+      skills: [{name:'React',level:'Advanced'}],
+      distribution:{backend:0.32,frontend:0.78}
+    };
+    localStorage.setItem('analysis_result', JSON.stringify(quick));
+    window.location.href = '../particulares/results.html';
+  });
+
+  // small ui audio click
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function uiClick(p=0.01){
+    try{
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.value = 900;
+      g.gain.value = p;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+      o.stop(audioCtx.currentTime + 0.14);
+    }catch(e){}
+  }
+
+})();
+</script>
+</body>
+</html>
