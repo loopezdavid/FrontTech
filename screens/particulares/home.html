@@ -296,10 +296,8 @@ html, body {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-40px); }
 }
-
 </style>
 </head>
-
 
 <body>
 
@@ -322,7 +320,7 @@ html, body {
         <span class="dot"></span>
         Privacidad local
       </div>
-      <button class="btn" onclick="location.href='../common/index.html'">Inicio</button>
+      <button class="btn" onclick="logout()">Salir</button>
     </div>
   </div>
 
@@ -385,10 +383,12 @@ html, body {
 
 <!-- FOOTER -->
 <div id="global-footer"></div>
-<script src="../common/js/footer.js"></script>
+<script src="../../screens/common/js/footer.js"></script>
 
-<!-- JS REAL -->
-<script type="module" src="js/home.js"></script>
+<!-- 🔐 AUTH -->
+<script src="../../screens/common/auth/auth_guard.js"></script>
+
+<script src="./js/home.js"></script>
 
 </body>
 </html>

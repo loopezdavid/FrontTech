@@ -117,9 +117,9 @@ h1{
   color:var(--muted);
   line-height:1.6;
 }
-
 </style>
 </head>
+
 <body>
 
 <div class="page">
@@ -131,15 +131,15 @@ h1{
       Inicia sesión para continuar con el análisis profesional de tu CV.
     </div>
 
-    <form class="form" onsubmit="login(event)">
-      <input class="input" type="email" placeholder="Correo electrónico" required />
-      <input class="input" type="password" placeholder="Contraseña" required />
+    <form class="form" id="loginForm">
+      <input id="email" class="input" type="email" placeholder="Correo electrónico" required />
+      <input id="password" class="input" type="password" placeholder="Contraseña" required />
       <button class="btn" type="submit">Entrar</button>
     </form>
 
     <div class="links">
-      <a href="#">Crear cuenta</a>
-      <a href="#" onclick="demo()">Entrar en modo demo</a>
+      <a href="./register.html">Crear cuenta</a>
+      <a href="#" id="demoBtn">Entrar en modo demo</a>
     </div>
 
     <div class="privacy">
@@ -153,28 +153,74 @@ h1{
 <script src="../../common/js/footer.js"></script>
 
 <script>
+const API_LOGIN = "http://127.0.0.1:8000/api/v1/auth/login";
+
 const params = new URLSearchParams(window.location.search);
-const mode = params.get('mode') || 'particulares';
+const mode = params.get("mode") || "particulares";
 
-document.getElementById('title').textContent =
-  mode === 'empresas' ? 'Acceso para empresas' : 'Acceso para particulares';
+document.getElementById("title").textContent =
+  mode === "empresas" ? "Acceso para empresas" : "Accede a tu cuenta";
 
-document.getElementById('subtitle').textContent =
-  mode === 'empresas'
-    ? 'Gestiona candidatos y análisis por lotes.'
-    : 'Analiza tu CV y obtén insights profesionales.';
+document.getElementById("subtitle").textContent =
+  mode === "empresas"
+    ? "Gestiona candidatos y análisis por lotes."
+    : "Inicia sesión para continuar con el análisis profesional de tu CV.";
 
-function login(e){
+document.getElementById("loginForm").addEventListener("submit", login);
+document.getElementById("demoBtn").addEventListener("click", demo);
+
+async function login(e){
   e.preventDefault();
-  if(mode === 'empresas'){
-    window.location.href = '../../empresas/home.html';
-  }else{
-    window.location.href = '../../particulares/home.html';
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if(!email || !password){
+    alert("Completa todos los campos");
+    return;
+  }
+
+  try{
+    const res = await fetch(API_LOGIN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    if(!res.ok){
+      throw new Error("Correo o contraseña incorrectos");
+    }
+
+    const user = await res.json();
+
+    // Guardar sesión
+    localStorage.setItem("auth_user", JSON.stringify(user));
+
+    // Redirigir según modo
+    if(mode === "empresas"){
+      window.location.href = "../../empresas/home.html";
+    } else {
+      window.location.href = "../../particulares/home.html";
+    }
+
+  }catch(err){
+    alert(err.message || "Error al iniciar sesión");
   }
 }
 
 function demo(){
-  login(new Event('submit'));
+  localStorage.setItem("auth_user", JSON.stringify({
+    user_id: 0,
+    email: "demo@elhuesaso.ai",
+    name: "Usuario Demo",
+    avatar: null
+  }));
+
+  if(mode === "empresas"){
+    window.location.href = "../../empresas/home.html";
+  } else {
+    window.location.href = "../../particulares/home.html";
+  }
 }
 </script>
 
