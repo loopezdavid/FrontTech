@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Registro — El Huesaso GPT</title>
+
+<style>
+:root{
+  --bg1:#04121a;
+  --bg2:#031319;
+  --accent:#56e6c8;
+  --accent2:#2fb0ff;
+  --muted:#9fbfc1;
+}
+
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Inter,system-ui;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:#eafbf9;
+}
+
+.page{
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:64px;
+}
+
+.card{
+  width:100%;
+  max-width:520px;
+  padding:56px;
+  border-radius:24px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  backdrop-filter:blur(12px);
+}
+
+.logo{
+  width:96px;
+  height:96px;
+  border-radius:22px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:34px;
+  color:#022;
+  margin-bottom:32px;
+}
+
+h1{margin:0 0 10px}
+.subtitle{color:var(--muted);margin-bottom:30px}
+
+.form{display:flex;flex-direction:column;gap:18px}
+
+.input{
+  padding:16px 18px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#fff;
+}
+
+.btn{
+  padding:16px;
+  border-radius:14px;
+  border:none;
+  font-weight:900;
+  cursor:pointer;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#022;
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+  <div class="card">
+    <div class="logo">EH</div>
+
+    <h1>Crear cuenta</h1>
+    <div class="subtitle">Regístrate para empezar a analizar tu CV</div>
+
+    <form id="registerForm" class="form">
+      <input id="name" class="input" type="text" placeholder="Nombre completo" required />
+      <input id="email" class="input" type="email" placeholder="Correo electrónico" required />
+      <input id="password" class="input" type="password" placeholder="Contraseña" required />
+      <input id="confirmPassword" class="input" type="password" placeholder="Repite la contraseña" required />
+      <button class="btn">Crear cuenta</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const API_REGISTER = "http://127.0.0.1:8000/api/v1/auth/register";
+
+document.getElementById("registerForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+  if (!name || !email || !password || !confirmPassword) {
+    alert("Completa todos los campos");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Las contraseñas no coinciden");
+    return;
+  }
+
+  const res = await fetch(API_REGISTER, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      confirm_password: confirmPassword,
+      avatar: null
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.detail || "Error al registrarse");
+    return;
+  }
+
+  const user = await res.json();
+  localStorage.setItem("auth_user", JSON.stringify(user));
+  window.location.href = "../../particulares/home.html";
+});
+</script>
+
+
+
+</body>
+</html>
