@@ -1,37 +1,10 @@
-// screens/auth/register.js
-
-let avatarBase64 = null;
-
 document.addEventListener("DOMContentLoaded", () => {
   const nameInput = document.getElementById("name");
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
   const confirmPasswordInput = document.getElementById("confirmPassword");
-  const avatarInput = document.getElementById("avatarInput");
-  const avatarPreview = document.getElementById("avatarPreview");
-  const avatarImg = document.getElementById("avatarImg");
   const registerBtn = document.getElementById("registerBtn");
   const errorBox = document.getElementById("errorBox");
-
-  // ===== Avatar preview =====
-  avatarInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      errorBox.textContent = "El archivo debe ser una imagen";
-      avatarInput.value = "";
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      avatarBase64 = reader.result;
-      avatarImg.src = avatarBase64;
-      avatarPreview.style.display = "flex";
-    };
-    reader.readAsDataURL(file);
-  });
 
   // ===== Registro =====
   registerBtn.addEventListener("click", async () => {
@@ -57,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
       email,
       password,
       confirm_password: confirmPassword,
-      avatar: avatarBase64
     };
 
     try {
