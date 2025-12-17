@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cargando — TechCareer</title>
+
+<style>
+:root{
+  --bg-1:#04121a;
+  --bg-2:#081e27;
+  --muted:#9fbfc1;
+  --accent:#6ef1d4;
+  --accent-2:#3fb7ff;
+  --glass: rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#e9f9f7;overflow:hidden}
+.wrapper{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px;gap:28px}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:1120px;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.04);
+  padding:30px;
+  display:flex;
+  gap:28px;
+  align-items:center;
+  box-shadow:0 30px 80px rgba(3,18,22,0.6);
+  backdrop-filter:blur(10px);
+}
+
+/* LEFT */
+.canvas-wrap{flex:1;min-height:260px;position:relative;display:flex;align-items:center;justify-content:center}
+.neural-canvas{width:100%;height:260px;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.02)}
+.mesh{position:absolute;inset:0}
+.node{fill:rgba(110,241,212,0.08);stroke:rgba(110,241,212,0.18);stroke-width:1}
+.link{stroke:rgba(63,183,255,0.06);stroke-width:1.2}
+
+/* RIGHT */
+.info{width:360px;display:flex;flex-direction:column;gap:14px}
+.brand-top{display:flex;align-items:center;gap:12px}
+.logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:900;color:#022}
+.h-title{font-weight:900;font-size:20px}
+.h-sub{color:var(--muted);font-size:13px}
+
+/* RING */
+.ring-wrap{display:flex;align-items:center;gap:14px;margin-top:10px}
+.ring{width:110px;height:110px;display:flex;align-items:center;justify-content:center;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .num{position:absolute;font-weight:900;font-size:22px}
+
+/* STEPS */
+.steps{margin-top:14px;border-radius:12px;padding:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
+.step{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;transition:all .25s}
+.step .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.step.active{background:linear-gradient(90deg,rgba(110,241,212,0.06),rgba(63,183,255,0.03));border:1px solid rgba(110,241,212,0.08)}
+.step.active .dot{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.step .text{font-size:13px;color:var(--muted)}
+
+.message{margin-top:14px;color:var(--muted);font-size:14px;min-height:34px}
+.controls{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}
+.btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022;border:none;font-weight:800}
+.btn.ghost{background:transparent}
+
+@media (max-width:980px){
+  .card{flex-direction:column}
+  .info{width:100%}
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <div class="card">
+
+    <!-- LEFT -->
+    <div class="canvas-wrap">
+      <div class="neural-canvas">
+        <svg class="mesh" viewBox="0 0 960 320">
+          <g id="links"></g>
+          <g id="nodes"></g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="info">
+      <div class="brand-top">
+        <div class="logo">TC</div>
+        <div>
+          <div class="h-title">Procesando tu CV</div>
+          <div class="h-sub">La IA extrae y analiza — esto puede tardar unos segundos</div>
+        </div>
+      </div>
+
+      <div class="ring-wrap">
+        <div class="ring">
+          <svg width="110" height="110" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" stroke="rgba(255,255,255,0.03)" stroke-width="12" fill="none"></circle>
+            <circle id="progressCircle" cx="50" cy="50" r="44" stroke="url(#grad)" stroke-width="12" stroke-linecap="round" fill="none" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#6ef1d4"/>
+                <stop offset="1" stop-color="#3fb7ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="num" id="pct">0%</div>
+        </div>
+
+        <div>
+          <div class="small">Estado del proceso</div>
+          <div id="currentPhase" style="font-weight:800;margin-top:6px">Inicializando…</div>
+          <div id="eta" class="small">ETA estimada: calculando…</div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step" id="s1"><div class="dot"></div><div class="text">Leyendo archivo</div></div>
+        <div class="step" id="s2"><div class="dot"></div><div class="text">Extrayendo texto</div></div>
+        <div class="step" id="s3"><div class="dot"></div><div class="text">Analizando con IA</div></div>
+        <div class="step" id="s4"><div class="dot"></div><div class="text">Generando insights</div></div>
+      </div>
+
+      <div class="message" id="message">Conectando al motor de análisis…</div>
+
+      <div class="controls">
+        <button class="btn ghost" id="cancelBtn">Cancelar</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;color:var(--muted);font-size:13px">
+    No cierres esta ventana. El progreso se actualizará automáticamente.
+  </div>
+
+</div>
+
+<script>
+(async function(){
+
+  const API_URL = "http://localhost:8001/api/v1/predict_pdf";
+  const RESULTS_URL = "/screens/particulares/results/resumen.html";
+  const HOME_URL = "/screens/particulares/home.html";
+
+  const pctEl = document.getElementById("pct");
+  const phaseEl = document.getElementById("currentPhase");
+  const msgEl = document.getElementById("message");
+  const circle = document.getElementById("progressCircle");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  let cancelled = false;
+  cancelBtn.onclick = ()=>{ cancelled=true; location.href = HOME_URL };
+
+  const circumference = 2 * Math.PI * 44;
+  function setPct(p){
+    pctEl.textContent = Math.round(p)+"%";
+    circle.style.strokeDashoffset = circumference * (1 - p/100);
+  }
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+  const cvFile = sessionStorage.getItem("cvFile");
+  if(!cvFile){
+    alert("No se ha encontrado el CV");
+    location.href = HOME_URL;
+    return;
+  }
+
+  (async()=>{
+    let p=0;
+    while(p<90 && !cancelled){
+      p+=Math.random()*4;
+      setPct(p);
+      await sleep(300);
+    }
+  })();
+
+  try{
+    phaseEl.textContent="Enviando CV al motor IA…";
+    const base64 = cvFile.split(",")[1];
+    const bytes = atob(base64);
+    const arr = new Uint8Array(bytes.length);
+    for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
+    const blob = new Blob([arr],{type:"application/pdf"});
+
+    const fd = new FormData();
+    fd.append("file", blob, "cv.pdf");
+
+    const res = await fetch(API_URL,{method:"POST",body:fd});
+    if(!res.ok) throw new Error(await res.text());
+
+    const result = await res.json();
+    sessionStorage.setItem("cvResult", JSON.stringify(result));
+
+    setPct(100);
+    phaseEl.textContent="Análisis completado";
+    msgEl.textContent="Redirigiendo a resultados…";
+    await sleep(600);
+    location.href = RESULTS_URL;
+
+  }catch(e){
+    console.error(e);
+    alert("Error analizando el CV");
+    location.href = HOME_URL;
+  }
+
+})();
+</script>
+</body>
+</html>
