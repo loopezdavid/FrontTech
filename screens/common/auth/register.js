@@ -6,6 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const registerBtn = document.getElementById("registerBtn");
   const errorBox = document.getElementById("errorBox");
 
+  // 🔹 El rol se define desde la pantalla común (particular / empresa)
+  // Se asume que ya está guardado en localStorage como "mode"
+  const role = localStorage.getItem("mode");
+
+  if (!role || !["particular", "empresa"].includes(role)) {
+    errorBox.textContent = "Rol de usuario no definido. Vuelve a seleccionar el tipo de cuenta.";
+    registerBtn.disabled = true;
+    return;
+  }
+
   // ===== Registro =====
   registerBtn.addEventListener("click", async () => {
     errorBox.textContent = "";
@@ -30,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
       email,
       password,
       confirm_password: confirmPassword,
+      role: role
     };
 
     try {
@@ -48,7 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Registro exitoso → ir a login
+      // Registro exitoso → limpiar rol temporal y redirigir a login
+      localStorage.removeItem("mode");
       window.location.href = "login.html";
 
     } catch (err) {
