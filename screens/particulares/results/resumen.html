@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results PRO · TechCareer</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<style>
+/* =====================
+   VARIABLES DE DISEÑO
+===================== */
+:root {
+  --bg: #050b16;
+  --card: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.12);
+  --accent: #6ef1d4;
+  --accent2: #3fb7ff;
+  --muted: #9fbfc1;
+}
+
+/* =====================
+   RESET BASE
+===================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, #0d3248, transparent 40%),
+    radial-gradient(circle at 80% 20%, #0b3b2e, transparent 45%),
+    var(--bg);
+  color: #eaf7f6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================
+     HEADER GLOBAL (TUYO)
+===================== -->
+<div id="app-header"></div>
+
+<!-- =====================
+     NAV INTERNA RESULTS
+     (NO es el header)
+===================== -->
+<nav class="results-tabs">
+  <button class="active">Resumen</button>
+  <button>Skills</button>
+  <button>Mejoras</button>
+</nav>
+
+<!-- =====================
+     CONTENIDO PRINCIPAL
+===================== -->
+<main class="results-pro">
+
+  <!-- COLUMNA IZQUIERDA -->
+  <section class="left-col">
+
+    <!-- PERFIL -->
+    <div class="profile-header">
+      <h1 id="role"></h1>
+      <div class="badges">
+        <span class="badge" id="seniority"></span>
+        <span class="badge accent" id="fit"></span>
+      </div>
+    </div>
+
+    <!-- RADAR -->
+    <div class="card">
+      <h3>Mapa de competencias</h3>
+      <p class="muted">Distribución técnica detectada en tu CV</p>
+      <canvas id="radar" height="180"></canvas>
+    </div>
+
+    <!-- MÉTRICAS -->
+    <div class="metrics">
+      <div class="metric">
+        Seniority
+        <span>72%</span>
+      </div>
+      <div class="metric">
+        Skills clave
+        <span>68%</span>
+      </div>
+      <div class="metric">
+        Versatilidad
+        <span>81%</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- COLUMNA DERECHA -->
+  <section class="right-col">
+
+    <!-- LECTURA PROFESIONAL -->
+    <div class="card highlight">
+      <h3>Lectura profesional</h3>
+      <p id="insight" class="insight-text"></p>
+    </div>
+
+    <!-- FORTALEZAS -->
+    <div class="card">
+      <h3>Fortalezas principales</h3>
+      <ul class="list">
+        <li>Backend Python y automatización</li>
+        <li>Análisis de datos y BI</li>
+        <li>Alta adaptabilidad técnica</li>
+      </ul>
+    </div>
+
+    <!-- MEJORAS -->
+    <div class="card">
+      <h3>Áreas de mejora</h3>
+      <ul class="list muted">
+        <li>DevOps y despliegues cloud</li>
+        <li>Arquitectura frontend avanzada</li>
+      </ul>
+    </div>
+
+    <!-- ROLES -->
+    <div class="card">
+      <h3>Roles profesionales recomendados</h3>
+      <div id="roles"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- =====================
+     FOOTER GLOBAL (TUYO)
+===================== -->
+<div id="global-footer"></div>
+
+<!-- =====================
+     ESTILOS RESULTS PRO
+===================== -->
+<style>
+/* NAV TABS */
+.results-tabs {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 56px 0;
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.results-tabs button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: var(--muted);
+  padding-bottom: 12px;
+  cursor: pointer;
+}
+
+.results-tabs button.active {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+}
+
+/* GRID */
+.results-pro {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 48px;
+}
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 28px;
+  margin-bottom: 28px;
+}
+
+.card.highlight {
+  background: linear-gradient(
+    180deg,
+    rgba(110,241,212,0.10),
+    rgba(255,255,255,0.04)
+  );
+}
+
+/* PERFIL */
+.profile-header h1 {
+  margin: 0 0 10px;
+  font-size: 34px;
+}
+
+.badges {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.badge {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.08);
+}
+
+.badge.accent {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #001814;
+  font-weight: 700;
+}
+
+/* METRICS */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 18px;
+}
+
+.metric {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.metric span {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* TEXTOS */
+.insight-text {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.list {
+  padding-left: 18px;
+}
+
+.list li {
+  margin-bottom: 10px;
+}
+
+/* ROLES */
+.role {
+  margin-bottom: 18px;
+}
+
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bar {
+  height: 8px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  margin-top: 6px;
+}
+
+.bar div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+</style>
+
+<!-- =====================
+     JS
+===================== -->
+<script>
+/* HEADER & FOOTER (TUYO) */
+fetch("../../common/components/header.html")
+  .then(r => r.text())
+  .then(html => app-header.innerHTML = html);
+
+fetch("../../common/components/footer.html")
+  .then(r => r.text())
+  .then(html => global-footer.innerHTML = html);
+
+/* UTIL */
+function formatText(text) {
+  return text.replaceAll("_"," ")
+             .toLowerCase()
+             .replace(/\b\w/g,l=>l.toUpperCase());
+}
+
+/* DATA */
+const data = JSON.parse(sessionStorage.getItem("cvResult"));
+
+role.textContent = formatText(data.prediccion);
+seniority.textContent = data.seniority;
+fit.textContent = Math.round(data.top3[0].prob * 100) + "% de encaje";
+
+insight.textContent =
+  "Perfil con una base sólida en backend Python y análisis de datos. Buen encaje para entornos técnicos orientados a automatización y BI. Reforzar competencias DevOps aumentaría el acceso a roles senior y mejoraría el posicionamiento salarial.";
+
+/* RADAR */
+new Chart(radar, {
+  type: "radar",
+  data: {
+    labels: ["Backend","Data / BI","Frontend","DevOps","Management"],
+    datasets: [{
+      data: [75,70,55,35,65],
+      backgroundColor: "rgba(110,241,212,0.25)",
+      borderColor: "#6ef1d4",
+      borderWidth: 2,
+      pointBackgroundColor: "#6ef1d4"
+    }]
+  },
+  options: {
+    plugins:{legend:{display:false}},
+    scales:{r:{ticks:{display:false}}}
+  }
+});
+
+/* ROLES */
+data.top3.forEach(r=>{
+  const div=document.createElement("div");
+  div.className="role";
+  div.innerHTML=`
+    <div class="role-header">
+      <span>${formatText(r.job_title)}</span>
+      <span>${Math.round(r.prob*100)}%</span>
+    </div>
+    <div class="bar"><div style="width:${r.prob*100}%"></div></div>
+  `;
+  roles.appendChild(div);
+});
+</script>
+
+</body>
+</html>
