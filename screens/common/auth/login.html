@@ -138,7 +138,7 @@ h1{
     </form>
 
     <div class="links">
-      <a href="./register.html">Crear cuenta</a>
+      <a id="goRegister" href="#">Crear cuenta</a>
       <a href="#" id="demoBtn">Entrar en modo demo</a>
     </div>
 
@@ -155,16 +155,25 @@ h1{
 <script>
 const API_LOGIN = "http://127.0.0.1:8000/api/v1/auth/login";
 
+// 🔹 Leer mode desde la URL
 const params = new URLSearchParams(window.location.search);
-const mode = params.get("mode") || "particulares";
+const rawMode = params.get("mode") || "particulares";
 
+// Normalizamos a lo que entiende el backend
+const mode = rawMode.startsWith("empresa") ? "empresa" : "particular";
+
+// UI
 document.getElementById("title").textContent =
-  mode === "empresas" ? "Acceso para empresas" : "Accede a tu cuenta";
+  mode === "empresa" ? "Acceso para empresas" : "Accede a tu cuenta";
 
 document.getElementById("subtitle").textContent =
-  mode === "empresas"
+  mode === "empresa"
     ? "Gestiona candidatos y análisis por lotes."
     : "Inicia sesión para continuar con el análisis profesional de tu CV.";
+
+// 👉 CLAVE: propagar mode al registro
+const goRegister = document.getElementById("goRegister");
+goRegister.href = `register.html?mode=${mode}`;
 
 document.getElementById("loginForm").addEventListener("submit", login);
 document.getElementById("demoBtn").addEventListener("click", demo);
@@ -192,16 +201,12 @@ async function login(e){
     }
 
     const user = await res.json();
-
-    // Guardar sesión
     localStorage.setItem("auth_user", JSON.stringify(user));
 
-    // Redirigir según modo
-    if(mode === "empresas"){
-      window.location.href = "../../empresas/home.html";
-    } else {
-      window.location.href = "../../particulares/home.html";
-    }
+    window.location.href =
+      mode === "empresa"
+        ? "../../empresas/home.html"
+        : "../../particulares/home.html";
 
   }catch(err){
     alert(err.message || "Error al iniciar sesión");
@@ -215,11 +220,10 @@ function demo(){
     name: "Usuario Demo",
   }));
 
-  if(mode === "empresas"){
-    window.location.href = "../../empresas/home.html";
-  } else {
-    window.location.href = "../../particulares/home.html";
-  }
+  window.location.href =
+    mode === "empresa"
+      ? "../../empresas/home.html"
+      : "../../particulares/home.html";
 }
 </script>
 
