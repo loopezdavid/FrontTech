@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resultados · Mejoras</title>
+
+<style>
+:root{
+  --bg:#050b16;
+  --panel:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.14);
+  --accent:#6ef1d4;
+}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:#eaf7f6}
+header{padding:18px 40px;border-bottom:1px solid var(--border)}
+main{max-width:1200px;margin:0 auto;padding:32px 40px}
+.tabs{display:flex;gap:10px;margin-bottom:28px}
+.tab-btn{padding:8px 18px;border-radius:14px;border:1px solid var(--border);
+background:rgba(255,255,255,.05);color:#eaf7f6;text-decoration:none;font-size:13px}
+.tab-btn.active{background:linear-gradient(90deg,var(--accent),#3fb7ff);color:#022;font-weight:700}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:24px}
+.muted{opacity:.7}
+</style>
+</head>
+
+<body>
+
+<header>
+  <strong>Resultados del Análisis</strong>
+</header>
+
+<main>
+
+<div class="tabs">
+  <a class="tab-btn" href="resumen.html">Resumen</a>
+  <a class="tab-btn" href="skills.html">Skills</a>
+  <a class="tab-btn active" href="mejoras.html">Mejoras</a>
+</div>
+
+<div class="card">
+  <h3>Mejoras recomendadas</h3>
+  <p class="muted">
+    Las recomendaciones personalizadas estarán disponibles en próximas versiones.
+  </p>
+</div>
+
+</main>
+
+</body>
+</html>

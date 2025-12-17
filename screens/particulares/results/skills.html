@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resultados · Skills</title>
+
+<style>
+/* MISMO CSS que resumen */
+:root{
+  --bg:#050b16;
+  --panel:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.14);
+  --accent:#6ef1d4;
+  --accent2:#3fb7ff;
+}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:#eaf7f6}
+header{padding:18px 40px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border)}
+main{max-width:1200px;margin:0 auto;padding:32px 40px}
+.tabs{display:flex;gap:10px;margin-bottom:28px}
+.tab-btn{padding:8px 18px;border-radius:14px;border:1px solid var(--border);
+background:rgba(255,255,255,.05);color:#eaf7f6;text-decoration:none;font-size:13px}
+.tab-btn.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#022;font-weight:700}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:24px}
+.skill-pill{display:inline-block;padding:6px 12px;margin:6px;border-radius:14px;
+background:rgba(255,255,255,.1);font-size:12px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <strong>Resultados del Análisis</strong>
+  <button onclick="location.href='../home.html'">← Volver</button>
+</header>
+
+<main>
+
+<div class="tabs">
+  <a class="tab-btn" href="resumen.html">Resumen</a>
+  <a class="tab-btn active" href="skills.html">Skills</a>
+  <a class="tab-btn" href="mejoras.html">Mejoras</a>
+</div>
+
+<div class="card">
+  <h3>Skills detectadas</h3>
+  <div id="skillsList"></div>
+</div>
+
+</main>
+
+<script>
+const data=JSON.parse(sessionStorage.getItem("cvResult"));
+if(!data) location.href="../home.html";
+
+const ACRONYMS=["SQL","BI","IA","API","ML","AI"];
+const format=t=>t.replace(/[_-]+/g," ").toLowerCase().split(" ")
+.map(w=>ACRONYMS.includes(w.toUpperCase())?w.toUpperCase():w[0].toUpperCase()+w.slice(1)).join(" ");
+
+Object.values(data.skills||{}).flat().forEach(s=>{
+  const el=document.createElement("span");
+  el.className="skill-pill";
+  el.textContent=format(s);
+  skillsList.appendChild(el);
+});
+</script>
+
+</body>
+</html>
