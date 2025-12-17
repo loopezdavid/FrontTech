@@ -289,39 +289,71 @@ body {
      JS
 ===================== -->
 <script>
-/* HEADER & FOOTER (TUYO) */
+/* =====================
+   HEADER & FOOTER
+===================== */
 fetch("../../common/components/header.html")
   .then(r => r.text())
-  .then(html => app-header.innerHTML = html);
+  .then(html => {
+    document.getElementById("app-header").innerHTML = html;
+  });
 
 fetch("../../common/components/footer.html")
   .then(r => r.text())
-  .then(html => global-footer.innerHTML = html);
+  .then(html => {
+    document.getElementById("global-footer").innerHTML = html;
+  });
 
-/* UTIL */
+/* =====================
+   UTIL
+===================== */
 function formatText(text) {
-  return text.replaceAll("_"," ")
-             .toLowerCase()
-             .replace(/\b\w/g,l=>l.toUpperCase());
+  return text
+    .replaceAll("_", " ")
+    .toLowerCase()
+    .replace(/\b\w/g, l => l.toUpperCase());
 }
 
-/* DATA */
-const data = JSON.parse(sessionStorage.getItem("cvResult"));
+/* =====================
+   DATA
+===================== */
+const stored = sessionStorage.getItem("cvResult");
+if (!stored) {
+  alert("No hay resultados del CV");
+  window.location.href = "../home.html";
+}
 
-role.textContent = formatText(data.prediccion);
-seniority.textContent = data.seniority;
-fit.textContent = Math.round(data.top3[0].prob * 100) + "% de encaje";
+const data = JSON.parse(stored);
 
-insight.textContent =
+/* =====================
+   ELEMENTOS DOM
+===================== */
+const roleEl = document.getElementById("role");
+const seniorityEl = document.getElementById("seniority");
+const fitEl = document.getElementById("fit");
+const insightEl = document.getElementById("insight");
+const radarEl = document.getElementById("radar");
+const rolesEl = document.getElementById("roles");
+
+/* =====================
+   TEXTO PRINCIPAL
+===================== */
+roleEl.textContent = formatText(data.prediccion);
+seniorityEl.textContent = data.seniority;
+fitEl.textContent = Math.round(data.top3[0].prob * 100) + "% de encaje";
+
+insightEl.textContent =
   "Perfil con una base sólida en backend Python y análisis de datos. Buen encaje para entornos técnicos orientados a automatización y BI. Reforzar competencias DevOps aumentaría el acceso a roles senior y mejoraría el posicionamiento salarial.";
 
-/* RADAR */
-new Chart(radar, {
+/* =====================
+   RADAR
+===================== */
+new Chart(radarEl, {
   type: "radar",
   data: {
-    labels: ["Backend","Data / BI","Frontend","DevOps","Management"],
+    labels: ["Backend", "Data / BI", "Frontend", "DevOps", "Management"],
     datasets: [{
-      data: [75,70,55,35,65],
+      data: [75, 70, 55, 35, 65],
       backgroundColor: "rgba(110,241,212,0.25)",
       borderColor: "#6ef1d4",
       borderWidth: 2,
@@ -329,23 +361,29 @@ new Chart(radar, {
     }]
   },
   options: {
-    plugins:{legend:{display:false}},
-    scales:{r:{ticks:{display:false}}}
+    plugins: { legend: { display: false } },
+    scales: { r: { ticks: { display: false } } }
   }
 });
 
-/* ROLES */
-data.top3.forEach(r=>{
-  const div=document.createElement("div");
-  div.className="role";
-  div.innerHTML=`
+/* =====================
+   ROLES
+===================== */
+rolesEl.innerHTML = "";
+
+data.top3.forEach(r => {
+  const div = document.createElement("div");
+  div.className = "role";
+  div.innerHTML = `
     <div class="role-header">
       <span>${formatText(r.job_title)}</span>
-      <span>${Math.round(r.prob*100)}%</span>
+      <span>${Math.round(r.prob * 100)}%</span>
     </div>
-    <div class="bar"><div style="width:${r.prob*100}%"></div></div>
+    <div class="bar">
+      <div style="width:${r.prob * 100}%"></div>
+    </div>
   `;
-  roles.appendChild(div);
+  rolesEl.appendChild(div);
 });
 </script>
 
