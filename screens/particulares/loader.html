@@ -12,11 +12,26 @@
   --muted:#9fbfc1;
   --accent:#6ef1d4;
   --accent-2:#3fb7ff;
-  --glass: rgba(255,255,255,0.03);
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#e9f9f7;overflow:hidden}
-.wrapper{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px;gap:28px}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  color:#e9f9f7;
+  overflow:hidden
+}
+
+.wrapper{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:36px;
+  gap:28px
+}
 
 /* CARD */
 .card{
@@ -34,61 +49,164 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
 }
 
 /* LEFT */
-.canvas-wrap{flex:1;min-height:260px;position:relative;display:flex;align-items:center;justify-content:center}
-.neural-canvas{width:100%;height:260px;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.02)}
-.mesh{position:absolute;inset:0}
-.node{fill:rgba(110,241,212,0.08);stroke:rgba(110,241,212,0.18);stroke-width:1}
-.link{stroke:rgba(63,183,255,0.06);stroke-width:1.2}
+.canvas-wrap{
+  flex:1;
+  min-height:260px;
+  position:relative;
+}
+
+.neural-canvas{
+  width:100%;
+  height:260px;
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);
+  border:1px solid rgba(255,255,255,0.02)
+}
+
+/* FAKE BARS */
+.fake-bars{
+  position:absolute;
+  bottom:16px;
+  left:16px;
+  right:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.bar{
+  height:10px;
+  border-radius:8px;
+  background:rgba(255,255,255,0.04);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.bar span{
+  display:block;
+  height:100%;
+  width:0%;
+  border-radius:8px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  box-shadow:0 0 14px rgba(110,241,212,0.35);
+  transition:width .3s ease;
+}
 
 /* RIGHT */
-.info{width:360px;display:flex;flex-direction:column;gap:14px}
-.brand-top{display:flex;align-items:center;gap:12px}
+.info{
+  width:360px;
+  display:flex;
+  flex-direction:column;
+  gap:14px
+}
+
+.brand-top{
+  display:flex;
+  gap:12px;
+  align-items:center
+}
+
 .logo{
   width:56px;
   height:56px;
   border-radius:12px;
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  color:#022;
-  overflow:hidden;
+  overflow:hidden
 }
 .logo img{
   width:100%;
   height:100%;
-  object-fit:cover;
-  border-radius:12px;
-  display:block;
+  object-fit:cover
 }
+
 .h-title{font-weight:900;font-size:20px}
 .h-sub{color:var(--muted);font-size:13px}
 
 /* RING */
-.ring-wrap{display:flex;align-items:center;gap:14px;margin-top:10px}
-.ring{width:110px;height:110px;display:flex;align-items:center;justify-content:center;position:relative}
+.ring-wrap{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-top:10px
+}
+
+.ring{
+  width:110px;
+  height:110px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
 .ring svg{transform:rotate(-90deg)}
-.ring .num{position:absolute;font-weight:900;font-size:22px}
+.ring .num{
+  position:absolute;
+  font-weight:900;
+  font-size:22px
+}
 
 /* STEPS */
-.steps{margin-top:14px;border-radius:12px;padding:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
-.step{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;transition:all .25s}
-.step .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.04)}
-.step.active{background:linear-gradient(90deg,rgba(110,241,212,0.06),rgba(63,183,255,0.03));border:1px solid rgba(110,241,212,0.08)}
-.step.active .dot{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.steps{
+  margin-top:14px;
+  border-radius:12px;
+  padding:12px;
+  background:rgba(255,255,255,0.01);
+  border:1px solid rgba(255,255,255,0.02)
+}
+.step{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:8px;
+  border-radius:10px
+}
+.step .dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.05)
+}
 .step .text{font-size:13px;color:var(--muted)}
 
-.message{margin-top:14px;color:var(--muted);font-size:14px;min-height:34px}
-.controls{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}
-.btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit;cursor:pointer}
-.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022;border:none;font-weight:800}
-.btn.ghost{background:transparent}
+.message{
+  margin-top:14px;
+  color:var(--muted);
+  font-size:14px;
+  min-height:34px
+}
 
-@media (max-width:980px){
+.controls{
+  display:flex;
+  justify-content:flex-end
+}
+
+.btn{
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);
+  color:inherit;
+  cursor:pointer
+}
+
+@media(max-width:980px){
   .card{flex-direction:column}
   .info{width:100%}
 }
+
+/* BAR LABELS */
+.bar-row{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.bar-label{
+  font-size:11px;
+  color:rgba(159,191,193,0.75);
+  letter-spacing:.2px;
+}
+
 </style>
 </head>
 
@@ -99,33 +217,54 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
 
     <!-- LEFT -->
     <div class="canvas-wrap">
-      <div class="neural-canvas">
-        <svg class="mesh" viewBox="0 0 960 320">
-          <g id="links"></g>
-          <g id="nodes"></g>
-        </svg>
-      </div>
+      <div class="neural-canvas"></div>
+
+<div class="fake-bars">
+  <div class="bar-row">
+    <div class="bar-label">Inicializando pipeline</div>
+    <div class="bar"><span></span></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Extrayendo texto</div>
+    <div class="bar"><span></span></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Detectando skills</div>
+    <div class="bar"><span></span></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Matching de roles</div>
+    <div class="bar"><span></span></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Estimando seniority</div>
+    <div class="bar"><span></span></div>
+  </div>
+</div>
+
     </div>
 
     <!-- RIGHT -->
     <div class="info">
       <div class="brand-top">
         <div class="logo">
-          <img src="../icono_transparente.png" alt="TechCareer" />
+          <img src="/screens/logo.webp" alt="TechCareer">
         </div>
         <div>
           <div class="h-title">Procesando tu CV</div>
-          <div class="h-sub">La IA extrae y analiza — esto puede tardar unos segundos</div>
+          <div class="h-sub">La IA está analizando tu perfil</div>
         </div>
       </div>
 
       <div class="ring-wrap">
         <div class="ring">
           <svg width="110" height="110" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="44" stroke="rgba(255,255,255,0.03)" stroke-width="12" fill="none"></circle>
-            <circle id="progressCircle" cx="50" cy="50" r="44" stroke="url(#grad)" stroke-width="12" stroke-linecap="round" fill="none" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
+            <circle cx="50" cy="50" r="44" stroke="rgba(255,255,255,0.04)" stroke-width="12" fill="none"/>
+            <circle id="progressCircle" cx="50" cy="50" r="44"
+              stroke="url(#grad)" stroke-width="12" stroke-linecap="round"
+              fill="none" stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
             <defs>
-              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+              <linearGradient id="grad">
                 <stop offset="0" stop-color="#6ef1d4"/>
                 <stop offset="1" stop-color="#3fb7ff"/>
               </linearGradient>
@@ -135,35 +274,27 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
         </div>
 
         <div>
-          <div class="small">Estado del proceso</div>
-          <div id="currentPhase" style="font-weight:800;margin-top:6px">Inicializando…</div>
-          <div id="eta" class="small">ETA estimada: calculando…</div>
+          <div style="font-size:12px;color:var(--muted)">Estado</div>
+          <div id="currentPhase" style="font-weight:800;margin-top:6px">
+            Inicializando…
+          </div>
         </div>
       </div>
 
-      <div class="steps">
-        <div class="step" id="s1"><div class="dot"></div><div class="text">Leyendo archivo</div></div>
-        <div class="step" id="s2"><div class="dot"></div><div class="text">Extrayendo texto</div></div>
-        <div class="step" id="s3"><div class="dot"></div><div class="text">Analizando con IA</div></div>
-        <div class="step" id="s4"><div class="dot"></div><div class="text">Generando insights</div></div>
-      </div>
-
-      <div class="message" id="message">Conectando al motor de análisis…</div>
+      <div class="message" id="message">Preparando análisis…</div>
 
       <div class="controls">
-        <button class="btn ghost" id="cancelBtn">Cancelar</button>
+        <button class="btn" id="cancelBtn">Cancelar</button>
       </div>
     </div>
 
   </div>
 
-  <div style="text-align:center;color:var(--muted);font-size:13px">
-    No cierres esta ventana. El progreso se actualizará automáticamente.
-  </div>
-
 </div>
 
 <script>
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
 (async function(){
 
   const API_URL = "http://127.0.0.1:8001/api/v1/cv/test-analyze";
@@ -171,74 +302,95 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
   const HOME_URL = "/screens/particulares/home.html";
 
   const pctEl = document.getElementById("pct");
+  const circle = document.getElementById("progressCircle");
   const phaseEl = document.getElementById("currentPhase");
   const msgEl = document.getElementById("message");
-  const circle = document.getElementById("progressCircle");
   const cancelBtn = document.getElementById("cancelBtn");
 
-  let cancelled = false;
-  cancelBtn.onclick = ()=>{ cancelled=true; location.href = HOME_URL };
+  cancelBtn.onclick = ()=>location.href = HOME_URL;
 
   const circumference = 2 * Math.PI * 44;
   function setPct(p){
     pctEl.textContent = Math.round(p)+"%";
     circle.style.strokeDashoffset = circumference * (1 - p/100);
   }
-  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
-  const cvFile = sessionStorage.getItem("cvFile");
-  if(!cvFile){
-    alert("No se ha encontrado el CV");
-    location.href = HOME_URL;
-    return;
-  }
-
-  (async()=>{
-    let p=0;
-    while(p<90 && !cancelled){
-      p+=Math.random()*4;
+  // fake progress 5s
+  const fakeProgress = async () => {
+    const start = performance.now();
+    while(true){
+      const p = Math.min(((performance.now()-start)/5000)*100,100);
       setPct(p);
+      if(p>=100) break;
+      await sleep(50);
+    }
+  };
+
+  // fake bars
+  const bars = document.querySelectorAll(".bar span");
+  let running = true;
+  (async()=>{
+    while(running){
+      bars.forEach(b=>b.style.width = (Math.random()*90+10)+"%");
       await sleep(300);
     }
   })();
 
-  try{
-    phaseEl.textContent="Enviando CV al motor IA…";
-    const base64 = cvFile.split(",")[1];
-    const bytes = atob(base64);
+  // backend
+  const callBackend = async () => {
+    const cvFile = sessionStorage.getItem("cvFile");
+    if(!cvFile) throw new Error("CV no encontrado");
+
+    const bytes = atob(cvFile.split(",")[1]);
     const arr = new Uint8Array(bytes.length);
     for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
-    const blob = new Blob([arr],{type:"application/pdf"});
 
     const fd = new FormData();
-    fd.append("file", blob, "cv.pdf");
+    fd.append("file", new Blob([arr],{type:"application/pdf"}), "cv.pdf");
 
     const res = await fetch(API_URL,{method:"POST",body:fd});
-    if(!res.ok) throw new Error(await res.text());
+    const json = await res.json();
+    sessionStorage.setItem("cvResult", JSON.stringify(json));
+  };
 
-    const result = await res.json();
-    sessionStorage.setItem("cvResult", JSON.stringify(result));
-
-    setPct(100);
-    phaseEl.textContent="Análisis completado";
-    msgEl.textContent="Redirigiendo a resultados…";
-    await sleep(600);
+  try{
+    await Promise.all([fakeProgress(), callBackend()]);
+    running = false;
+    bars.forEach(b=>b.style.width="100%");
+    msgEl.textContent = "Redirigiendo…";
+    await sleep(400);
     location.href = RESULTS_URL;
-
- }catch(e){
-  console.error("Error REAL:", e);
-
-  if (sessionStorage.getItem("cvResult")) {
-    location.href = RESULTS_URL;
-  } else {
-    alert("Error analizando el CV");
+  }catch(e){
+    alert("Error analizando CV");
     location.href = HOME_URL;
   }
-}
-
-
 
 })();
+const fakeTexts = [
+  "Tokenizando CV",
+  "Normalizando experiencia",
+  "Extrayendo skills técnicas",
+  "Clasificando tecnologías",
+  "Calculando seniority",
+  "Matching con roles",
+  "Analizando mercado salarial",
+  "Generando insights",
+  "Optimizando resultados"
+];
+
+const labels = document.querySelectorAll(".bar-label");
+
+const animateLabels = async () => {
+  while (running) {
+    labels.forEach(label => {
+      const t = fakeTexts[Math.floor(Math.random() * fakeTexts.length)];
+      label.textContent = t;
+    });
+    await sleep(900 + Math.random() * 600);
+  }
+};
+animateLabels();
+
 </script>
 </body>
 </html>

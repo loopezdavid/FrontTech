@@ -442,23 +442,35 @@ function renderRoles(){
  const info=data.role_insights[state.role];
  const fit=Math.round(info.matching_skills_count/(info.matching_skills_count+info.missing_skills_count)*100);
  const employ=Math.round(r.probability*100*fit/100);
+ const salaryRange = calculateSalaryRange(data.salary.salary_pred_eur);
 
- document.getElementById("tab-roles").innerHTML=`
- <div class="section-stack">
-  <div class="card card-lg hero">
-    <h1 class="h1">${r.label}</h1>
-    <p class="p">Análisis profesional basado en criterios reales de selección técnica</p>
-    <div class="hero-bottom">
-      <div class="hero-metric">
-        <div class="value">${data.seniority}</div>
-        <div class="p">Seniority</div>
-      </div>
-      <div class="hero-metric">
-        <div class="value">${Math.round(data.salary.salary_pred_eur).toLocaleString("es-ES")} €</div>
-        <div class="p">Salario estimado</div>
+document.getElementById("tab-roles").innerHTML = `
+  <div class="section-stack">
+    <div class="card card-lg hero">
+      <h1 class="h1">${r.label}</h1>
+      <p class="p">Análisis profesional basado en criterios reales de selección técnica</p>
+
+      <div class="hero-bottom">
+
+        <div class="hero-metric">
+          <div class="value">${data.seniority}</div>
+          <div class="p">Seniority</div>
+        </div>
+
+        <div class="hero-metric">
+          <div class="value">
+            ${salaryRange.min.toLocaleString("es-ES")} €
+            –
+            ${salaryRange.max.toLocaleString("es-ES")} €
+          </div>
+          <div class="p">Rango salarial estimado</div>
+          <div class="p">
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
+
 
   <div class="grid-2">
     <div class="card">
@@ -565,6 +577,26 @@ function initSkillFilters() {
       });
     });
   });
+}
+
+// ================= SALARY RANGE =================
+function calculateSalaryRange(salaryEur) {
+  if (!salaryEur || isNaN(salaryEur)) {
+    return null;
+  }
+
+  // 1. Redondear a centenas
+  const base = Math.round(salaryEur / 100) * 100;
+
+  // 2. Aplicar pinza ±1.500 €
+  const min = base - 1500;
+  const max = base + 1500;
+
+  return {
+    base,
+    min,
+    max
+  };
 }
 
 
