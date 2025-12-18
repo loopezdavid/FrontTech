@@ -15,7 +15,6 @@
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* 👇 ahora sí: ancho casi completo */
     .header-container {
       width: 100%;
       height: 100%;
@@ -29,8 +28,25 @@
     /* ===== LOGO (IZQUIERDA) ===== */
     .header-logo {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 12px;
       cursor: pointer;
+    }
+
+    .header-logo-img {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: block;
+    }
+
+    .header-logo-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
     }
 
     .logo-main {
@@ -116,7 +132,6 @@
       box-shadow: 0 8px 20px rgba(52, 211, 153, 0.35);
     }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
       .header-container {
         grid-template-columns: auto auto;
@@ -132,8 +147,13 @@
 
     <!-- IZQUIERDA -->
     <div class="header-logo" onclick="location.href='/particulares/home.html'">
-      <span class="logo-main">TechCareer</span>
-      <span class="logo-sub">AI Career Intelligence</span>
+      <div class="header-logo-img">
+        <img src="../../icono_transparente.png" alt="TechCareer" />
+      </div>
+      <div>
+        <span class="logo-main">TechCareer</span>
+        <span class="logo-sub">AI Career Intelligence</span>
+      </div>
     </div>
 
     <!-- CENTRO -->
