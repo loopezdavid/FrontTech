@@ -32,7 +32,7 @@ body {
   flex-direction: column;
   text-align: center;
   z-index: 3;
-  padding: 20px;
+  padding: 16px;
 }
 
 /* ------------------------
@@ -41,43 +41,43 @@ body {
 .aurora {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 20% 30%, rgba(63,183,255,0.18), transparent 60%),
-              radial-gradient(circle at 80% 70%, rgba(110,241,212,0.16), transparent 70%),
-              radial-gradient(circle at 40% 90%, rgba(110,241,212,0.08), transparent 60%);
-  filter: blur(120px);
-  opacity: 0.55;
+  background: radial-gradient(circle at 20% 30%, rgba(63,183,255,0.14), transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(110,241,212,0.12), transparent 70%),
+              radial-gradient(circle at 40% 90%, rgba(110,241,212,0.06), transparent 60%);
+  filter: blur(90px);
+  opacity: 0.45;
   animation: auroraMove 18s infinite alternate ease-in-out;
   z-index: 1;
 }
 
 @keyframes auroraMove {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, -60px) scale(1.2); }
-  100% { transform: translate(-30px, 40px) scale(1); }
+  50% { transform: translate(30px, -45px) scale(1.15); }
+  100% { transform: translate(-25px, 30px) scale(1); }
 }
 
 /* ------------------------
    LOGO
 -------------------------*/
 .logo {
-  font-size: 40px;
-  width: 100px;
-  height: 100px;
-  border-radius: 26px;
+  font-size: 32px;
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   display: flex;
   justify-content: center;
   align-items: center;
   color: #022;
   font-weight: 900;
-  margin-bottom: 20px;
-  box-shadow: 0 25px 60px rgba(63,183,255,0.35);
+  margin-bottom: 16px;
+  box-shadow: 0 18px 45px rgba(63,183,255,0.28);
   animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
   0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
+  50%  { transform: translateY(-8px); }
   100% { transform: translateY(0); }
 }
 
@@ -85,9 +85,9 @@ body {
    HERO TEXT
 -------------------------*/
 h1 {
-  font-size: 58px;
+  font-size: 44px;
   font-weight: 900;
-  letter-spacing: -1px;
+  letter-spacing: -0.8px;
   margin: 0;
   background: linear-gradient(90deg, #ffffff, #b8fff1);
   -webkit-background-clip: text;
@@ -95,12 +95,12 @@ h1 {
 }
 
 .subtitle {
-  font-size: 22px;
-  margin: 14px auto 40px auto;
-  max-width: 800px;
+  font-size: 18px;
+  margin: 12px auto 32px auto;
+  max-width: 680px;
   color: #9fc9cc;
   opacity: 0.95;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 /* Typing animation (CSS only) */
@@ -124,22 +124,22 @@ h1 {
    BUTTON
 -------------------------*/
 .start-btn {
-  padding: 18px 50px;
-  border-radius: 18px;
+  padding: 14px 42px;
+  border-radius: 16px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   border: none;
   color: #022;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 900;
   cursor: pointer;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   transition: transform .2s ease, box-shadow .2s ease;
-  box-shadow: 0 18px 45px rgba(63,183,255,0.25);
+  box-shadow: 0 14px 36px rgba(63,183,255,0.22);
 }
 
 .start-btn:hover {
-  transform: scale(1.06);
-  box-shadow: 0 22px 60px rgba(63,183,255,0.35);
+  transform: scale(1.05);
+  box-shadow: 0 20px 50px rgba(63,183,255,0.32);
 }
 
 /* ------------------------
@@ -147,18 +147,18 @@ h1 {
 -------------------------*/
 .options {
   display: flex;
-  gap: 30px;
+  gap: 24px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .card {
-  width: 380px;
-  padding: 30px;
-  border-radius: 24px;
-  backdrop-filter: blur(18px);
+  width: 320px;
+  padding: 24px;
+  border-radius: 22px;
+  backdrop-filter: blur(16px);
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.06);
   transition: 0.25s ease;
   text-align: left;
   cursor: pointer;
@@ -167,26 +167,26 @@ h1 {
 
 /* 3D tilt hover effect */
 .card:hover {
-  transform: translateY(-10px) scale(1.03) rotateX(4deg);
-  box-shadow: 0 28px 70px rgba(63,183,255,0.25);
+  transform: translateY(-8px) scale(1.025) rotateX(3deg);
+  box-shadow: 0 22px 55px rgba(63,183,255,0.22);
   border-color: var(--accent);
 }
 
 .card-icon {
-  font-size: 52px;
-  margin-bottom: 12px;
+  font-size: 44px;
+  margin-bottom: 10px;
 }
 
 .card-title {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   margin-bottom: 6px;
 }
 
 .card-desc {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 </style>
@@ -237,7 +237,8 @@ h1 {
   </div>
 
 </div>
-  <!-- Global Footer -->
+
+<!-- Global Footer -->
 <div id="global-footer"></div>
 <script src="../common/js/footer.js"></script>
 

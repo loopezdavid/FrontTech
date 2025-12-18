@@ -27,279 +27,312 @@ body {
   color: #eaf7f6;
 }
 
-/* ===== HEADER ===== */
-header {
-  padding: 28px 56px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-
-header strong {
-  font-size: 20px;
-  font-weight: 900;
-}
-
 /* ===== MAIN ===== */
 main {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 64px 56px 120px;
+  padding: 48px 48px 120px;
 }
 
 /* ===== HERO ===== */
+.hero-container {
+  max-width: 1000px;
+  margin: 0 auto 96px;
+  text-align: center;
+}
+
 .hero-title {
-  font-size: 56px;
+  font-size: 42px;
   font-weight: 900;
-  line-height: 1.05;
-  max-width: 900px;
+  line-height: 1.1;
+  margin-bottom: 12px;
 }
 
 .hero-sub {
-  margin-top: 18px;
-  font-size: 22px;
+  font-size: 17px;
   color: var(--muted);
-  max-width: 900px;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
-/* ===== GRID ===== */
+/* ===== HERO GRID ===== */
 .hero-grid {
-  margin-top: 64px;
+  margin-top: 56px;
   display: grid;
-  grid-template-columns: 1.2fr 1.1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 180px minmax(620px, 1fr) 180px;
+  gap: 32px;
+  align-items: center;
 }
 
-/* ===== LEFT ===== */
-.hero-copy ul {
-  margin-top: 28px;
-  padding-left: 20px;
-  color: var(--muted);
+/* ===== SIDE BOX ===== */
+.side-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 24px;
+  font-size: 14px;
+}
+
+.side-card h3 {
+  margin-top: 0;
   font-size: 16px;
+}
+
+.side-card ul {
+  padding-left: 18px;
+  color: var(--muted);
 }
 
 /* ===== UPLOADER ===== */
 .uploader {
-  padding: 44px;
-  border-radius: 24px;
-  background: var(--card);
-  border: 2px dashed var(--border);
+  padding: 40px;
+  border-radius: 28px;
+  background: linear-gradient(
+    160deg,
+    rgba(110,241,212,0.12),
+    rgba(255,255,255,0.06)
+  );
+  border: 2px dashed rgba(255,255,255,0.25);
   text-align: center;
 }
 
+.uploader h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.uploader p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
 .uploader label {
+  display: block;
+  padding: 36px;
+  border: 2px dashed rgba(110,241,212,0.6);
+  border-radius: 22px;
   cursor: pointer;
+  background: rgba(0,0,0,0.25);
+  margin-bottom: 28px;
 }
 
 .uploader strong {
-  font-size: 20px;
-}
-
-.uploader span {
-  display: block;
-  margin-top: 10px;
-  color: var(--muted);
+  font-size: 16px;
 }
 
 /* ===== BUTTON ===== */
 .actions {
-  margin-top: 32px;
-  text-align: center;
+  margin-top: 16px;
 }
 
 button {
-  padding: 18px 42px;
-  border-radius: 16px;
+  padding: 14px 36px;
+  border-radius: 14px;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 900;
   cursor: pointer;
   background: linear-gradient(90deg, var(--accent), var(--accent2));
   color: #022;
 }
 
-/* ===== RIGHT ===== */
-.side-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 32px;
-}
-
-.side-card h3 {
-  margin-top: 0;
-}
-
-.side-card ul {
-  padding-left: 20px;
-  color: var(--muted);
-}
-
-/* ===== HOW ===== */
-.section {
-  margin-top: 120px;
-}
-
-.section h2 {
-  font-size: 40px;
-  margin-bottom: 48px;
-}
-
-.how-grid {
+/* ===== INFO GRID ===== */
+.info-grid {
+  max-width: 1000px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 36px;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
 }
 
-.how-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 36px;
+/* ===== RESPONSIVE ===== */
+@media(max-width: 1100px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.how-card strong {
-  font-size: 20px;
+.file-label{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  font-size:16px;
 }
+
+.file-name{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:420px;
+}
+
+.file-remove{
+  cursor:pointer;
+  font-weight:900;
+  color:#ff6b6b;
+  font-size:18px;
+  line-height:1;
+}
+
+.file-remove:hover{
+  transform:scale(1.15);
+}
+
 </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-  <div id="app-header"></div>
+<!-- HEADER -->
+<div id="app-header"></div>
 
 <main>
 
-  <div class="hero-container" style="
-    max-width:1200px;
-    margin:0 auto;
-    padding:64px 0 120px;
-    text-align:center
-  ">
 
-    <!-- TITLE -->
-    <h1 class="hero-title hero" style="text-align:center">
-      Analiza tu CV
+  <div class="hero-container">
+
+    <h1 class="hero-title">
+      Analiza tu CV con criterio real de mercado
     </h1>
 
-    <p class="hero-sub" style="margin-bottom:64px ; text-align:center">
-      Analizamos tu perfil profesional con modelos de inteligencia artificial
-      entrenados con datos reales del mercado tecnológico.
+    <p class="hero-sub">
+      Analizamos tu perfil profesional con inteligencia artificial entrenada
+      con datos reales del sector tecnológico.
     </p>
 
-    <!-- UPLOAD -->
-    <section style="
-      padding:56px;
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.18);
-      border-radius:32px;
-      text-align:center;
-      margin-bottom:80px;
-    ">
+    <!-- GRID -->
+    <div class="hero-grid">
 
-      <h2 style="font-size:28px;margin-bottom:12px">
-        Sube tu CV en PDF
-      </h2>
+      <div class="side-card">
+        <h3>Qué analiza la IA</h3>
+        <ul>
+          <li>Experiencia real</li>
+          <li>Stack tecnológico</li>
+          <li>Encaje por rol</li>
+        </ul>
+      </div>
 
-      <p style="color:var(--muted);margin-bottom:32px">
-        Arrastra el archivo o haz clic para seleccionarlo.<br>
-        El análisis es inmediato y el archivo no se guarda.
-      </p>
+      <!-- UPLOADER -->
+      <section class="uploader">
 
-      <label for="fileInput" style="
-        display:block;
-        padding:56px;
-        border:3px dashed rgba(110,241,212,0.6);
-        border-radius:24px;
-        cursor:pointer;
-        margin-bottom:32px;
-        background:rgba(0,0,0,0.25);
-      ">
-        <strong id="fileLabel" style="font-size:20px">
-          Arrastra aquí tu CV o haz clic para subirlo
-        </strong>
-      </label>
+        <h2>Sube tu CV en PDF</h2>
+        <p>
+          Arrastra el archivo o haz clic para seleccionarlo.<br>
+          El análisis es inmediato y el archivo no se guarda.
+        </p>
 
-      <input
-        id="fileInput"
-        type="file"
-        accept="application/pdf"
-        style="display:none"
-      />
+        <label for="fileInput">
+          <div id="fileLabel" class="file-label">
+            Arrastra aquí tu CV o haz clic para subirlo
+          </div>
+        </label>
 
-      <button id="analyzeBtn" style="font-size:18px;padding:20px 48px">
-        Analizar CV
-      </button>
-    </section>
+        <input
+          id="fileInput"
+          type="file"
+          accept="application/pdf"
+          style="display:none"
+        />
+
+        <div class="actions">
+          <button id="analyzeBtn">Analizar CV</button>
+        </div>
+
+      </section>
+
+      <div class="side-card">
+        <h3>Por qué confiar</h3>
+        <ul>
+          <li>Lógica recruiter</li>
+          <li>Datos de mercado</li>
+          <li>Análisis objetivo</li>
+        </ul>
+      </div>
+
+    </div>
 
     <!-- INFO -->
-    <section style="
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:40px;
-    ">
+    <section class="info-grid" style="margin-top:80px">
 
       <div class="side-card">
-        <h3>¿Qué obtendrás?</h3>
+        <h3>Qué obtendrás</h3>
         <ul>
-          <li>Rol profesional más probable</li>
-          <li>Top 3 perfiles alternativos</li>
-          <li>Probabilidades reales por rol</li>
-          <li>Base para estimación salarial</li>
+          <li>Rol principal</li>
+          <li>Top perfiles alternativos</li>
+          <li>Probabilidades reales</li>
+          <li>Base salarial</li>
         </ul>
       </div>
 
       <div class="side-card">
-        <h3>¿Qué hace la IA?</h3>
+        <h3>Cómo funciona</h3>
         <ul>
-          <li>Analiza experiencia y skills</li>
-          <li>Compara con miles de perfiles</li>
-          <li>Calcula afinidad por rol</li>
-          <li>Devuelve resultados objetivos</li>
+          <li>Extraemos texto</li>
+          <li>Analizamos skills</li>
+          <li>Comparamos con mercado</li>
+          <li>Generamos insights</li>
         </ul>
       </div>
 
     </section>
 
-    <!-- HISTORIAL DE PDFs -->
-    <section style="margin-top: 40px;">
-      <h2 style="margin-bottom: 16px;">CVs subidos</h2>
-      <div id="pdfHistory" class="recent-list"></div>
+    <!-- HISTORIAL -->
+    <section style="margin-top:56px">
+      <h2 style="margin-bottom:16px;font-size:22px">
+        CVs subidos
+      </h2>
+      <div id="pdfHistory"></div>
     </section>
 
   </div>
 
 </main>
 
-
-<!-- FOOTER GLOBAL -->
+<!-- FOOTER -->
 <div id="app-footer"></div>
 
 <script>
-  fetch("../common/components/footer.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("app-footer").innerHTML = html;
-    })
-    .catch(err => console.error("Error cargando footer:", err));
-</script>
+fetch("../common/components/footer.html")
+  .then(r => r.text())
+  .then(h => document.getElementById("app-footer").innerHTML = h);
 
+fetch("../common/components/header.html")
+  .then(r => r.text())
+  .then(h => document.getElementById("app-header").innerHTML = h);
+</script>
 
 <script src="./js/home.js"></script>
 <script src="./js/pdf_upload.js"></script>
+
 <script>
-  fetch("../common/components/header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("app-header").innerHTML = html;
-    })
-    .catch(err => console.error("Error cargando header:", err));
+const fileInput  = document.getElementById("fileInput");
+const fileLabel  = document.getElementById("fileLabel");
+const analyzeBtn = document.getElementById("analyzeBtn");
+
+const DEFAULT_TEXT = "Arrastra aquí tu CV o haz clic para subirlo";
+
+fileInput.addEventListener("change", () => {
+  if (!fileInput.files.length) return;
+
+  const fileName = fileInput.files[0].name;
+
+  fileLabel.innerHTML = `
+    <span class="file-name">${fileName}</span>
+    <span class="file-remove" title="Quitar archivo">✕</span>
+  `;
+
+  analyzeBtn.disabled = false;
+
+  fileLabel.querySelector(".file-remove").addEventListener("click", (e) => {
+    e.stopPropagation();   // 🔑 evita abrir el selector
+    fileInput.value = "";  // reset real
+    fileLabel.textContent = DEFAULT_TEXT;
+    analyzeBtn.disabled = true;
+  });
+});
 </script>
-
-
-</body>
 
 </body>
 </html>
