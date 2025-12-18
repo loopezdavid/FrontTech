@@ -167,6 +167,7 @@ button {
 
 <body>
 
+    <!-- HEADER -->
   <div id="app-header"></div>
 
 <main>
@@ -175,15 +176,15 @@ button {
     max-width:1200px;
     margin:0 auto;
     padding:64px 0 120px;
+    text-align:center
   ">
 
     <!-- TITLE -->
-    <h1 class="hero-title" style="text-align:left">
-      Tu CV, analizado con la misma lógica<br>
-      que usaría un recruiter senior
+    <h1 class="hero-title hero" style="text-align:center">
+      Analiza tu CV
     </h1>
 
-    <p class="hero-sub" style="margin-bottom:64px">
+    <p class="hero-sub" style="margin-bottom:64px ; text-align:center">
       Analizamos tu perfil profesional con modelos de inteligencia artificial
       entrenados con datos reales del mercado tecnológico.
     </p>
@@ -274,16 +275,13 @@ button {
 
 
 <!-- FOOTER GLOBAL -->
-<div id="global-footer"></div>
+<div id="app-footer"></div>
 
 <script>
   fetch("../common/components/footer.html")
-    .then(res => {
-      if (!res.ok) throw new Error("Footer no encontrado");
-      return res.text();
-    })
+    .then(res => res.text())
     .then(html => {
-      document.getElementById("global-footer").innerHTML = html;
+      document.getElementById("app-footer").innerHTML = html;
     })
     .catch(err => console.error("Error cargando footer:", err));
 </script>
@@ -293,10 +291,7 @@ button {
 <script src="./js/pdf_upload.js"></script>
 <script>
   fetch("../common/components/header.html")
-    .then(res => {
-      if (!res.ok) throw new Error("Header no encontrado");
-      return res.text();
-    })
+    .then(res => res.text())
     .then(html => {
       document.getElementById("app-header").innerHTML = html;
     })

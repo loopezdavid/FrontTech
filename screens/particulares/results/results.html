@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TechCareer · Results FINAL PRO v2 Compact</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* ================= DESIGN SYSTEM ================= */
+:root{
+  --bg:#050b16;
+  --card:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.14);
+  --accent:#6ef1d4;
+  --accent2:#3fb7ff;
+  --text:#eaf7f6;
+  --muted:#9fbfc1;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, #0d3248, transparent 40%),
+    radial-gradient(circle at 80% 20%, #0b3b2e, transparent 45%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.55;
+}
+
+/* ================= TYPOGRAPHY (COMPACT) ================= */
+.h1{font-size:32px;font-weight:700;letter-spacing:-.02em;margin:0 0 8px}
+.h2{font-size:22px;font-weight:600;margin:0 0 6px}
+.h3{font-size:15px;font-weight:600;margin:0 0 4px}
+.p{font-size:14px;color:var(--muted);margin:0}
+.value{font-size:30px;font-weight:700}
+
+/* ================= NAV ================= */
+.results-tabs{
+  position:sticky;top:0;z-index:10;
+  display:flex;justify-content:center;gap:40px;
+  padding:18px 0;
+  background:rgba(5,11,22,.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.results-tabs button{
+  background:none;border:none;
+  font-size:14px;font-weight:600;
+  color:var(--muted);
+  cursor:pointer;padding-bottom:4px;
+}
+.results-tabs button.active{
+  color:var(--accent);
+  border-bottom:2px solid var(--accent);
+}
+
+/* ================= LAYOUT ================= */
+.dashboard{
+  max-width:1300px;
+  margin:0 auto;
+  padding:64px 40px 120px;
+  display:flex;
+  flex-direction:column;
+  gap:88px;
+}
+.section-stack{display:flex;flex-direction:column;gap:40px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+
+/* ================= CARDS (COMPACT) ================= */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:32px;
+}
+.card-lg{padding:44px}
+
+/* ================= HERO ================= */
+.hero{text-align:center}
+.hero-bottom{
+  display:flex;justify-content:center;gap:64px;
+  margin-top:28px;
+}
+.hero-metric{
+  text-align:center;
+}
+.hero-metric .value{font-size:28px}
+
+/* ================= METRICS ================= */
+.metric{
+  background:linear-gradient(180deg,rgba(110,241,212,.16),rgba(255,255,255,.04));
+  border:1px solid rgba(110,241,212,.22);
+  border-radius:18px;
+  padding:24px;
+  text-align:center;
+}
+.metric .value{font-size:26px}
+.metric .p{margin-top:6px}
+
+/* ================= ROLES ================= */
+.role-list{display:flex;flex-direction:column;gap:12px}
+.role{
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  cursor:pointer;
+}
+.role.active{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#022;
+}
+.role span{float:right;font-weight:700}
+
+/* ================= SNAPSHOT ================= */
+.snapshot{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.snapshot-card{
+  background:rgba(255,255,255,.05);
+  border-radius:18px;
+  padding:26px;
+  text-align:center;
+}
+.snapshot-card .value{font-size:32px}
+.snapshot-card .p{margin-top:6px}
+
+/* ================= SKILLS ================= */
+.skills-layout{
+  display:grid;
+  grid-template-columns:420px 1fr;
+  gap:40px;
+  align-items:center;
+}
+.donut-box{
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:24px;
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:20px;
+  align-items:center;
+}
+.legend{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  font-size:13px;
+}
+.legend span{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.legend i{
+  width:10px;height:10px;border-radius:50%;
+  display:inline-block;
+}
+
+.insight-box{
+  background:rgba(255,255,255,.04);
+  border-radius:22px;
+  padding:32px;
+}
+.filter-bar{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.filter-btn{
+  padding:8px 14px;border-radius:999px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--muted);
+  cursor:pointer;font-size:13px;
+}
+.filter-btn.active{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#022;border:none;
+}
+
+.skill-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:26px;
+  text-align:center;
+}
+/* ===== LAYOUT EXACTO DONUT / LEYENDA / LECTURA ===== */
+
+/* Donut */
+.donut-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Leyenda */
+.legend-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+/* Punto de color */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Lectura profesional */
+.insight-box {
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.insight-box p {
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* ===== SKILLS SECTION ===== */
+
+/* Donut */
+.donut-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Leyenda */
+.legend-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Insight */
+.insight-box {
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* Filtros */
+.skills-filters {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.filter {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  color: #cfe;
+  cursor: pointer;
+}
+
+.filter.active {
+  background: #6fffe9;
+  color: #022;
+  border-color: transparent;
+}
+
+/* Cards */
+.skills-grid-cards {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.skill-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.skill-card h3 {
+  margin-bottom: 8px;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+
+/* ===== SKILLS VISUAL ===== */
+.skills-visual-grid{
+  display:grid;
+  grid-template-columns:240px 260px 1fr;
+  gap:36px;
+  align-items:center;
+}
+
+.donut-box{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.legend-box{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  font-size:14px;
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+}
+
+.insight-box{
+  background:rgba(255,255,255,.04);
+  border-radius:18px;
+  padding:24px;
+}
+
+/* ===== SKILL CARDS ===== */
+.skills-cards-grid{
+  margin-top:36px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:28px;
+}
+
+/* ================= MEJORAS ================= */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.stat{
+  background:rgba(255,255,255,.05);
+  border-radius:18px;
+  padding:26px;
+  text-align:center;
+}
+.stat .value{font-size:30px}
+.missing-grid{
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:36px;
+}
+.missing{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,120,120,.4);
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+}
+.priority{font-size:11px;color:#ff9c9c;font-weight:700}
+
+/* ================= CTA ================= */
+.cta{text-align:center;margin-top:64px}
+.cta button{
+  margin-top:28px;
+  padding:16px 44px;
+  border-radius:16px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#022;
+  font-size:16px;font-weight:700;
+  cursor:pointer;
+}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+  <div id="app-header"></div>
+
+  <!-- CONTENIDO RESULTADOS -->
+<nav class="results-tabs">
+  <button data-tab="roles" class="active">Resumen</button>
+  <button data-tab="skills">Skills</button>
+  <button data-tab="mejoras">Mejoras</button>
+</nav>
+
+<main class="dashboard">
+  <section id="tab-roles"></section>
+  <section id="tab-skills" class="hidden"></section>
+  <section id="tab-mejoras" class="hidden"></section>
+</main>
+
+  <!-- FOOTER -->
+  <div id="app-footer"></div>
+
+
+<script>
+const data = JSON.parse(sessionStorage.getItem("cvResult"));
+const state = { role:data.roles.active_role };
+
+document.querySelectorAll(".results-tabs button").forEach(b=>{
+  b.onclick=()=>switchTab(b.dataset.tab);
+});
+
+function switchTab(tab){
+ document.querySelectorAll(".results-tabs button").forEach(b=>b.classList.remove("active"));
+ document.querySelector(`[data-tab='${tab}']`).classList.add("active");
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById("tab-"+tab).classList.remove("hidden");
+ if(tab==="roles")renderRoles();
+ if(tab==="skills")renderSkills();
+ if(tab==="mejoras")renderMejoras();
+}
+
+/* ================= RESUMEN ================= */
+function renderRoles(){
+ const r=data.roles.available_roles.find(x=>x.role_id===state.role);
+ const info=data.role_insights[state.role];
+ const fit=Math.round(info.matching_skills_count/(info.matching_skills_count+info.missing_skills_count)*100);
+ const employ=Math.round(r.probability*100*fit/100);
+
+ document.getElementById("tab-roles").innerHTML=`
+ <div class="section-stack">
+  <div class="card card-lg hero">
+    <h1 class="h1">${r.label}</h1>
+    <p class="p">Análisis profesional basado en criterios reales de selección técnica</p>
+    <div class="hero-bottom">
+      <div class="hero-metric">
+        <div class="value">${data.seniority}</div>
+        <div class="p">Seniority</div>
+      </div>
+      <div class="hero-metric">
+        <div class="value">${Math.round(data.salary.salary_pred_eur).toLocaleString("es-ES")} €</div>
+        <div class="p">Salario estimado</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2 class="h2">Roles probables</h2>
+      <p class="p">Selecciona un rol para actualizar el análisis.</p>
+      <div class="role-list">
+        ${data.roles.available_roles.map(x=>`
+          <div class="role ${x.role_id===state.role?"active":""}" onclick="changeRole('${x.role_id}')">
+            ${x.label}<span>${Math.round(x.probability*100)}%</span>
+          </div>`).join("")}
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="h2">Comparativa visual</h2>
+      <canvas id="rolesChart"></canvas>
+    </div>
+  </div>
+
+    <div class="grid-3">
+    <div class="metric">
+      <div class="value">0,${employ}</div>
+      <div class="p">Empleabilidad</div>
+      <div class="p">Estimación global según encaje de skills y demanda</div>
+    </div>
+    <div class="metric">
+      <div class="value">Fortalezas</div>
+      <div class="p"> Buen dominio en <strong>${info.matching_skills.map(s=>s.name).join(" y ")}</strong>.</p></div>
+    </div>
+    <div class="metric">
+      <div class="value">Debilidades</div>
+      <div class="p"> La falta de experiencia en <strong>${info.missing_skills[0].name}</strong> limita tu encaje.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="h2">Snapshot de skills</h2>
+    <p class="p">Resumen rápido del encaje técnico.</p>
+    <p class="p">.</p>
+    <div class="snapshot">
+      <div class="snapshot-card">
+        <div class="value">${info.matching_skills_count}</div>
+        <div class="p">Skills actuales</div>
+      </div>
+      <div class="snapshot-card">
+        <div class="value">${info.missing_skills_count}</div>
+        <div class="p">Skills faltantes</div>
+      </div>
+      <div class="snapshot-card">
+        <div class="value">${fit}%</div>
+        <div class="p">Ratio de encaje</div>
+      </div>
+    </div>
+  </div>
+ </div>
+ `;
+ new Chart(document.getElementById("rolesChart"),{
+  type:"bar",
+  data:{labels:data.roles.available_roles.map(x=>x.label),
+        datasets:[{data:data.roles.available_roles.map(x=>Math.round(x.probability*100))}]},
+  options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{max:100}}}
+ });
+}
+function changeRole(r){state.role=r;renderRoles();}
+
+/* ================= SKILLS ================= */
+function renderSkillsDonut(counts, colors) {
+  const ctx = document.getElementById("skillsDonut");
+
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: Object.keys(counts),
+      datasets: [{
+        data: Object.values(counts),
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: false,
+      cutout: "65%",
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+function initSkillFilters() {
+  const buttons = document.querySelectorAll(".filter");
+  const cards = document.querySelectorAll(".skill-card");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const group = btn.dataset.group;
+
+      cards.forEach(card => {
+        card.style.display =
+          group === "all" || card.dataset.group === group
+            ? "block"
+            : "none";
+      });
+    });
+  });
+}
+
+
+function renderSkills() {
+
+  const skills = data.skills.detected;
+
+  // Agrupar skills por grupo
+  const counts = {};
+  skills.forEach(s => {
+    counts[s.group] = (counts[s.group] || 0) + 1;
+  });
+
+  const colors = ["#3fb7ff", "#ff6f91", "#ffad5a", "#7ef5c3"];
+
+  document.getElementById("tab-skills").innerHTML = `
+  <div class="section-stack">
+
+    <!-- HERO -->
+    <div class="card card-lg hero">
+      <h1 class="h1">Skills detectadas</h1>
+      <p class="p">Distribución y análisis de tus competencias técnicas</p>
+    </div>
+
+    <!-- VISUAL SKILLS -->
+    <div class="card">
+
+      <div class="skills-visual-grid">
+
+        <!-- DONUT -->
+        <div class="donut-box">
+          <canvas id="skillsDonut" width="220" height="220"></canvas>
+        </div>
+
+        <!-- LEYENDA -->
+        <div class="legend-box">
+          ${Object.keys(counts).map((g,i)=>`
+            <div class="legend-item">
+              <span class="dot" style="background:${colors[i % colors.length]}"></span>
+              <span>${g} (${counts[g]})</span>
+            </div>
+          `).join("")}
+        </div>
+
+        <!-- LECTURA PROFESIONAL -->
+        <div class="insight-box">
+          <h2 class="h2 hero">Lectura profesional</h2>
+          <p class="p hero">
+            Tu perfil se concentra principalmente en
+            <strong>${Object.keys(counts)[0]}</strong>,
+            lo que define una base clara de especialización.
+            Ampliar skills en otros grupos aumentará tu
+            versatilidad y encaje en más roles técnicos.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="skills-filters">
+      <button class="filter active" data-group="all">Todas</button>
+      ${Object.keys(counts).map(g => `
+        <button class="filter" data-group="${g}">${g}</button>
+      `).join("")}
+    </div>
+
+    <!-- GRID SKILLS -->
+    <div class="skills-cards-grid">
+      ${skills.map(s => `
+        <div class="skill-card" data-group="${s.group}">
+          <h3>${s.name}</h3>
+          <span class="badge">${s.group}</span>
+          <p>${s.description}</p>
+        </div>
+      `).join("")}
+    </div>
+
+  </div>
+  `;
+
+  renderSkillsDonut(counts, colors);
+  initSkillFilters();
+}
+
+function filterSkills(g,btn){
+ document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ document.querySelectorAll(".skill-card").forEach(c=>{
+   c.style.display=(g==="all"||c.dataset.group===g)?"block":"none";
+ });
+}
+
+/* ================= MEJORAS ================= */
+function renderMejoras(){
+  const info = data.role_insights[state.role];
+
+  const total = info.matching_skills_count + info.missing_skills_count;
+  const readiness = Math.round((info.matching_skills_count / total) * 100);
+
+  const highPriority = info.missing_skills.slice(0,3);
+  const mediumPriority = info.missing_skills.slice(3,6);
+
+  document.getElementById("tab-mejoras").innerHTML = `
+  <div class="section-stack">
+
+    <!-- HERO -->
+    <div class="card card-lg hero">
+      <h1 class="h1">Plan de mejora profesional</h1>
+      <p class="p">
+        Análisis de brechas técnicas y acciones concretas para mejorar tu encaje como
+        <strong>${state.role.replace("_"," ")}</strong>
+      </p>
+    </div>
+
+    <!-- KPIs -->
+    <div class="stats">
+      <div class="stat">
+        <div class="value">${readiness}%</div>
+        <div class="p">Nivel de preparación actual</div>
+      </div>
+      <div class="stat">
+        <div class="value">${info.matching_skills_count}</div>
+        <div class="p">Skills dominadas</div>
+      </div>
+      <div class="stat">
+        <div class="value">${info.missing_skills_count}</div>
+        <div class="p">Brecha técnica</div>
+      </div>
+    </div>
+
+    <!-- PROGRESO -->
+    <div class="card">
+      <h2 class="h2">Progreso respecto al perfil ideal</h2>
+      <canvas id="gapChart" height="90"></canvas>
+    </div>
+
+    <!-- ALTA PRIORIDAD -->
+    <div class="card">
+      <h2 class="h2">Skills de alta prioridad</h2>
+      <p class="p">
+        Estas competencias bloquean directamente el acceso al rol.
+      </p>
+
+      <div class="missing-grid">
+        ${highPriority.map(s => `
+          <div class="missing high">
+            <div class="priority">Alta prioridad</div>
+            <div class="value">${s.name}</div>
+            <div class="p">${s.description}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    <!-- MEDIA PRIORIDAD -->
+    <div class="card">
+      <h2 class="h2">Skills de media prioridad</h2>
+      <p class="p">
+        Mejoran tu competitividad y consolidan tu perfil.
+      </p>
+
+      <div class="missing-grid">
+        ${mediumPriority.map(s => `
+          <div class="missing medium">
+            <div class="priority">Media prioridad</div>
+            <div class="value">${s.name}</div>
+            <div class="p">${s.description}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    <!-- LECTURA PROFESIONAL CENTRADA -->
+    <div class="card insight-centered">
+      <h2 class="h2 hero">Lectura profesional</h2>
+      <p class="p hero">
+        Tu perfil presenta una base técnica sólida, pero todavía existe una brecha
+        relevante en competencias clave para este rol. Abordar primero las skills
+        de alta prioridad desbloqueará más oportunidades, mientras que las de media
+        prioridad te ayudarán a consolidar tu posicionamiento profesional.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <h2 class="h2">Convertir análisis en resultados</h2>
+      <p class="p">
+        Accede a un roadmap guiado, recursos y seguimiento de progreso.
+      </p>
+      <button>Desbloquear Roadmap PRO</button>
+    </div>
+
+  </div>
+  `;
+
+  new Chart(document.getElementById("gapChart"),{
+    type:"bar",
+    data:{
+      labels:["Skills requeridas","Skills actuales","Brecha"],
+      datasets:[{
+        data:[total, info.matching_skills_count, info.missing_skills_count],
+        backgroundColor:["#3fb7ff","#6ef1d4","#ff6f91"]
+      }]
+    },
+    options:{
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+}
+
+
+switchTab("roles");
+async function loadLayout() {
+  // HEADER
+  const header = await fetch("../../common/components/header.html");
+  document.getElementById("app-header").innerHTML = await header.text();
+
+  // FOOTER
+  const footer = await fetch("../../common/components/footer.html");
+  document.getElementById("app-footer").innerHTML = await footer.text();
+}
+
+loadLayout();
+
+</script>
+</body>
+</html>
