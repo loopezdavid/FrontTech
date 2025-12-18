@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api/v1/analyze-cv";
+const API_URL = "http://localhost:8000/api/v1/predict_pdf";
 
 export async function analyzeCV(file) {
   const formData = new FormData();

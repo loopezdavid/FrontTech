@@ -113,6 +113,19 @@ h1{margin:0 0 10px}
 <script>
 const API_REGISTER = "http://127.0.0.1:8000/api/v1/auth/register";
 
+const params = new URLSearchParams(window.location.search);
+const rawMode = params.get("mode");
+
+const role = rawMode && rawMode.startsWith("empresa")
+  ? "empresa"
+  : rawMode && rawMode.startsWith("particular")
+    ? "particular"
+    : null;
+
+if (!role) {
+  alert("No se ha definido el tipo de cuenta. Vuelve a seleccionarlo.");
+}
+
 document.getElementById("registerForm").addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -120,6 +133,8 @@ document.getElementById("registerForm").addEventListener("submit", async e => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+  if (!role) return;
 
   if (!name || !email || !password || !confirmPassword) {
     alert("Completa todos los campos");
@@ -139,22 +154,21 @@ document.getElementById("registerForm").addEventListener("submit", async e => {
       email,
       password,
       confirm_password: confirmPassword,
+      role
     })
   });
 
+  const data = await res.json();
+
   if (!res.ok) {
-    const err = await res.json();
-    alert(err.detail || "Error al registrarse");
+    alert(data.detail || "Error al registrarse");
     return;
   }
 
-  const user = await res.json();
-  localStorage.setItem("auth_user", JSON.stringify(user));
-  window.location.href = "../../particulares/home.html";
+  
+  window.location.href = `login.html?mode=${role}`;
 });
 </script>
-
-
 
 </body>
 </html>

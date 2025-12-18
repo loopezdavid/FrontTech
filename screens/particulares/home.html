@@ -262,6 +262,12 @@ button {
 
     </section>
 
+    <!-- HISTORIAL DE PDFs -->
+    <section style="margin-top: 40px;">
+      <h2 style="margin-bottom: 16px;">CVs subidos</h2>
+      <div id="pdfHistory" class="recent-list"></div>
+    </section>
+
   </div>
 
 </main>
@@ -271,22 +277,32 @@ button {
 <div id="global-footer"></div>
 
 <script>
-  fetch("../../common/components/footer.html")
-    .then(res => res.text())
+  fetch("../common/components/footer.html")
+    .then(res => {
+      if (!res.ok) throw new Error("Footer no encontrado");
+      return res.text();
+    })
     .then(html => {
       document.getElementById("global-footer").innerHTML = html;
     })
     .catch(err => console.error("Error cargando footer:", err));
 </script>
 
+
 <script src="./js/home.js"></script>
+<script src="./js/pdf_upload.js"></script>
 <script>
-  fetch("/common/components/header.html")
-    .then(res => res.text())
+  fetch("../common/components/header.html")
+    .then(res => {
+      if (!res.ok) throw new Error("Header no encontrado");
+      return res.text();
+    })
     .then(html => {
       document.getElementById("app-header").innerHTML = html;
-    });
+    })
+    .catch(err => console.error("Error cargando header:", err));
 </script>
+
 
 </body>
 

@@ -225,11 +225,18 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
     await sleep(600);
     location.href = RESULTS_URL;
 
-  }catch(e){
-    console.error(e);
+ }catch(e){
+  console.error("Error REAL:", e);
+
+  if (sessionStorage.getItem("cvResult")) {
+    location.href = RESULTS_URL;
+  } else {
     alert("Error analizando el CV");
     location.href = HOME_URL;
   }
+}
+
+
 
 })();
 </script>
