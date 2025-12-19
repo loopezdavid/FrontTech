@@ -398,8 +398,94 @@ body{
 
 <body>
 
-    <!-- HEADER -->
-  <div id="app-header"></div>
+<!-- HEADER -->
+<div id="app-header"></div>
+
+<script>
+  // ===============================
+  // LOAD HEADER
+  // ===============================
+  fetch("/screens/common/components/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("app-header").innerHTML = html;
+      initHeader();
+    });
+
+  // ===============================
+  // INIT HEADER
+  // ===============================
+  function initHeader() {
+    const container = document.getElementById("headerActions");
+    if (!container) return;
+
+    const raw = localStorage.getItem("auth_user");
+
+    // ---------- NO LOGUEADO ----------
+    if (!raw) {
+      container.innerHTML = `
+        <button class="btn-secondary"
+          onclick="location.href='/screens/common/auth/login.html'">
+          Login
+        </button>
+        <button class="btn-primary">Go Pro</button>
+      `;
+      return;
+    }
+
+    // ---------- LOGUEADO ----------
+    const session = JSON.parse(raw);
+    const user = session.user || session;
+
+    const firstName = user.name ? user.name.split(" ")[0] : "Usuario";
+    const secName = user.name ? user.name.split(" ")[1] : "Usuario";
+    const initial = firstName.charAt(0).toUpperCase();
+
+    container.innerHTML = `
+      <div class="user-dropdown">
+        <button class="user-trigger" onclick="toggleUserMenu(event)">
+          <span class="avatar">${initial}</span>
+          <span class="user-name">${firstName} ${secName}</span>
+          <span class="caret">▾</span>
+        </button>
+
+        <div class="user-menu">
+          <div class="user-menu-item">
+            Perfil
+          </div>
+          <div class="user-menu-item logout" onclick="logout()">
+            Salir
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary">Go Pro</button>
+    `;
+  }
+
+  // ===============================
+  // DROPDOWN TOGGLE
+  // ===============================
+  function toggleUserMenu(e) {
+    e.stopPropagation();
+    const menu = e.currentTarget.nextElementSibling;
+    menu.classList.toggle("open");
+  }
+
+  document.addEventListener("click", () => {
+    document
+      .querySelectorAll(".user-menu.open")
+      .forEach(menu => menu.classList.remove("open"));
+  });
+
+  // ===============================
+  // LOGOUT
+  // ===============================
+  function logout() {
+    localStorage.removeItem("auth_user");
+    location.href = "/screens/particulares/home.html";
+  }
+</script>
 
   <!-- CONTENIDO RESULTADOS -->
 <nav class="results-tabs">
@@ -812,10 +898,6 @@ function renderMejoras(){
 
 switchTab("roles");
 async function loadLayout() {
-  // HEADER
-  const header = await fetch("../../common/components/header.html");
-  document.getElementById("app-header").innerHTML = await header.text();
-
   // FOOTER
   const footer = await fetch("../../common/components/footer.html");
   document.getElementById("app-footer").innerHTML = await footer.text();

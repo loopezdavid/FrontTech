@@ -118,6 +118,14 @@
       cursor: pointer;
     }
 
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
     @media (max-width: 900px) {
       .header-container {
         grid-template-columns: auto auto;
@@ -126,12 +134,145 @@
         display: none;
       }
     }
+    .user-dropdown {
+  position: relative;
+}
+
+.user-trigger {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.caret {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: 130%;
+  background: rgba(15, 25, 40, 0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  min-width: 160px;
+  padding: 6px;
+  display: none;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  z-index: 2000;
+}
+
+.user-menu.open {
+  display: block;
+}
+
+.user-menu-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.user-menu-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.user-menu-item.logout {
+  color: #ff6b6b;
+}
+.user-dropdown {
+  position: relative;
+}
+
+.user-trigger {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.caret {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: 130%;
+  background: rgba(15, 25, 40, 0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  min-width: 160px;
+  padding: 6px;
+  display: none;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  z-index: 2000;
+}
+
+.user-menu.open {
+  display: block;
+}
+
+.user-menu-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+.user-menu-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* 🔴 SALIR */
+.user-menu-item.logout {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+.user-menu-item.logout:hover {
+  background: rgba(255,77,79,0.15);
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6ef1d4, #3fb7ff);
+  color: #022;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
   </style>
 
   <div class="header-container">
 
     <!-- LOGO -->
-    <div class="header-logo" onclick="location.href='/index.html'">
+    <div class="header-logo" onclick="location.href='/screens/particulares/home.html'">
       <div class="header-logo-img">
         <img src="/screens/logo.webp" alt="TechCareer" />
       </div>
@@ -146,17 +287,11 @@
       <a href="/screens/particulares/home.html" class="nav-link">Analyze CV</a>
       <a href="/screens/particulares/results/results.html" class="nav-link">Results</a>
       <a href="/screens/particulares/about.html" class="nav-link">How it works</a>
+      <a href="/screens/particulares/profile.html" class="nav-link">Profile</a>
     </nav>
 
-    <!-- ACTIONS -->
-    <div class="header-actions">
-      <button class="btn-secondary" onclick="location.href='/login.html'">
-        Login
-      </button>
-      <button class="btn-primary">
-        Go Pro
-      </button>
-    </div>
+    <!-- ACTIONS (DINÁMICAS) -->
+    <div class="header-actions" id="headerActions"></div>
 
   </div>
 </header>
